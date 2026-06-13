@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WORD UP! 中1英単語トレーニング</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F4FB;--panel:#FFFFFF;--primary:#3D2FB8;--primary-light:#6B5CE7;
+    --accent:#FF8A3D;--success:#18C29C;--danger:#FF5A6E;
+    --text:#1A1A2E;--sub:#7A7A94;--border:#E9E9F4;
+    --shadow:0 8px 28px rgba(61,47,184,.10);--shadow-sm:0 4px 14px rgba(61,47,184,.08);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Noto Sans JP',system-ui,sans-serif;color:var(--text);
+    background:linear-gradient(160deg,#EEEcFB 0%,#F4F4FB 40%,#F0F6FB 100%);
+    min-height:100dvh;display:flex;justify-content:center;}
+  .app{width:100%;max-width:480px;min-height:100dvh;background:var(--bg);
+    display:flex;flex-direction:column;position:relative;box-shadow:0 0 50px rgba(61,47,184,.06);}
+  .topbar{padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:10;background:linear-gradient(180deg,var(--bg) 70%,rgba(244,244,251,0));}
+  .brand{display:flex;flex-direction:column;line-height:1.05}
+  .brand .logo{font-family:'Poppins';font-weight:800;font-size:24px;letter-spacing:-.5px;color:var(--primary)}
+  .brand .logo span{color:var(--accent)}
+  .brand .sub{font-size:11px;color:var(--sub);font-weight:500;margin-top:2px}
+  .grp-pill{background:var(--panel);border:1px solid var(--border);border-radius:999px;
+    padding:7px 14px;font-size:12px;font-weight:700;color:var(--primary);box-shadow:var(--shadow-sm);
+    max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .screen{flex:1;overflow-y:auto;padding:6px 20px 40px;-webkit-overflow-scrolling:touch}
+  .hide{display:none!important}
+  .ring-card{background:var(--panel);border-radius:24px;padding:24px;box-shadow:var(--shadow);
+    display:flex;align-items:center;gap:20px;margin-bottom:18px;}
+  .ring{position:relative;width:104px;height:104px;flex:0 0 auto}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .pct b{font-family:'Poppins';font-size:26px;font-weight:800;color:var(--primary);line-height:1}
+  .ring .pct small{font-size:10px;color:var(--sub);font-weight:600;margin-top:2px}
+  .ring-info h2{font-size:15px;font-weight:900;margin-bottom:8px}
+  .ring-info .stat{display:flex;gap:14px}
+  .ring-info .stat div{font-size:11px;color:var(--sub);font-weight:600}
+  .ring-info .stat b{display:block;font-family:'Poppins';font-size:20px;color:var(--text);font-weight:700}
+  .section-label{font-size:12px;font-weight:800;color:var(--sub);margin:6px 2px 10px;letter-spacing:.3px}
+  .grp-scroll{display:flex;gap:9px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none}
+  .grp-scroll::-webkit-scrollbar{display:none}
+  .grp-chip{flex:0 0 auto;background:var(--panel);border:1.5px solid var(--border);border-radius:14px;
+    padding:10px 15px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;transition:.15s;white-space:nowrap;}
+  .grp-chip small{display:block;font-size:10px;color:var(--sub);font-weight:600;margin-top:1px}
+  .grp-chip.on{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:var(--shadow-sm)}
+  .grp-chip.on small{color:rgba(255,255,255,.8)}
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+  .mode{background:var(--panel);border-radius:20px;padding:20px 16px;cursor:pointer;
+    box-shadow:var(--shadow-sm);border:1.5px solid transparent;transition:.15s;display:flex;flex-direction:column;gap:8px;}
+  .mode:active{transform:scale(.97)}
+  .mode .ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px}
+  .mode h3{font-size:15px;font-weight:900}
+  .mode p{font-size:11px;color:var(--sub);font-weight:500;line-height:1.4}
+  .mode.flash .ic{background:#EAE7FB}
+  .mode.quiz .ic{background:#FFE9DB}
+  .mode.game .ic{background:#DEF7F0}
+  .mode.spell .ic{background:#E3F0FF}
+  .manage-btn{display:flex;align-items:center;gap:12px;background:var(--panel);border:1.5px solid var(--border);
+    border-radius:18px;padding:16px 18px;margin-top:12px;cursor:pointer;box-shadow:var(--shadow-sm);transition:.15s}
+  .manage-btn:active{transform:scale(.98)}
+  .manage-btn .ic{width:40px;height:40px;border-radius:12px;background:#FDE4E8;display:flex;align-items:center;justify-content:center;font-size:20px;flex:0 0 auto}
+  .manage-btn h3{font-size:14px;font-weight:900}
+  .manage-btn p{font-size:11px;color:var(--sub);font-weight:500}
+  .btn{border:none;border-radius:14px;font-family:inherit;font-weight:800;font-size:15px;padding:15px;cursor:pointer;transition:.15s;width:100%;}
+  .btn:active{transform:scale(.98)}
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:var(--shadow-sm)}
+  .btn-ghost{background:var(--panel);color:var(--primary);border:1.5px solid var(--border)}
+  .btn-accent{background:var(--accent);color:#fff}
+  .back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--sub);
+    font-weight:700;font-size:14px;cursor:pointer;padding:6px 2px;margin-bottom:8px;font-family:inherit;}
+  .mode-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .mode-head h2{font-size:18px;font-weight:900}
+  .progress-line{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin-bottom:18px}
+  .progress-line i{display:block;height:100%;background:var(--primary);border-radius:999px;transition:width .3s}
+  .flash-wrap{display:flex;flex-direction:column;align-items:center;gap:18px}
+  .card{width:100%;aspect-ratio:3/2;background:var(--panel);border-radius:24px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;
+    position:relative;padding:20px;text-align:center;transition:.2s;}
+  .card:active{transform:scale(.98)}
+  .card .tag{position:absolute;top:14px;left:16px;font-size:10px;font-weight:800;color:var(--sub);letter-spacing:.5px}
+  .card .tap-hint{position:absolute;bottom:14px;font-size:11px;color:var(--sub);font-weight:600}
+  .card .en{font-family:'Poppins';font-size:40px;font-weight:700;color:var(--primary);word-break:break-word}
+  .card .ja{font-size:28px;font-weight:700;color:var(--text)}
+  .card.learned-mark::after{content:'✓ おぼえた';position:absolute;top:13px;right:14px;font-size:10px;font-weight:800;color:var(--success)}
+  .flash-nav{display:flex;gap:10px;width:100%}
+  .flash-nav .btn{flex:1}
+  .flash-mark{display:flex;gap:10px;width:100%}
+  .counter{font-family:'Poppins';font-weight:700;color:var(--sub);font-size:14px}
+  .toggle-row{display:flex;gap:8px;align-items:center;justify-content:center;width:100%}
+  .seg{display:inline-flex;background:var(--panel);border:1.5px solid var(--border);border-radius:12px;padding:3px;gap:2px}
+  .seg button{border:none;background:none;font-family:inherit;font-weight:700;font-size:12px;color:var(--sub);padding:7px 12px;border-radius:9px;cursor:pointer}
+  .seg button.on{background:var(--primary);color:#fff}
+  .q-card{background:var(--panel);border-radius:22px;padding:30px 20px;box-shadow:var(--shadow);text-align:center;margin-bottom:16px}
+  .q-card .qlabel{font-size:11px;font-weight:800;color:var(--sub);letter-spacing:.5px;margin-bottom:12px}
+  .q-card .qword{font-family:'Poppins';font-size:36px;font-weight:700;color:var(--primary);word-break:break-word}
+  .q-card .qword.ja{font-family:'Noto Sans JP';color:var(--text);font-size:28px}
+  .choices{display:grid;gap:10px}
+  .choice{background:var(--panel);border:1.5px solid var(--border);border-radius:15px;padding:16px;
+    font-family:inherit;font-size:16px;font-weight:700;color:var(--text);cursor:pointer;text-align:left;transition:.12s;}
+  .choice:active{transform:scale(.99)}
+  .choice.correct{background:var(--success);border-color:var(--success);color:#fff}
+  .choice.wrong{background:var(--danger);border-color:var(--danger);color:#fff}
+  .choice.dim{opacity:.45}
+  .quiz-score{font-family:'Poppins';font-weight:700;color:var(--sub);font-size:14px}
+  .result{text-align:center;padding:30px 10px}
+  .result .big{font-family:'Poppins';font-size:60px;font-weight:800;color:var(--primary);line-height:1}
+  .result .emoji{font-size:54px;margin-bottom:6px}
+  .result h2{font-size:20px;font-weight:900;margin:10px 0 4px}
+  .result p{color:var(--sub);font-weight:600;font-size:13px;margin-bottom:20px}
+  .miss-list{text-align:left;background:var(--panel);border-radius:16px;padding:6px 4px;box-shadow:var(--shadow-sm);margin-bottom:18px;max-height:220px;overflow-y:auto}
+  .miss-list .row{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);font-size:14px}
+  .miss-list .row:last-child{border:none}
+  .miss-list .row b{font-family:'Poppins';color:var(--primary);font-weight:700}
+  .miss-list .row span{color:var(--sub);font-weight:600}
+  .game-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-family:'Poppins';font-weight:700}
+  .game-top .timer{font-size:22px;color:var(--primary)}
+  .game-top .left{font-size:13px;color:var(--sub)}
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .tile{background:var(--panel);border:2px solid var(--border);border-radius:14px;padding:16px 8px;min-height:62px;
+    display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;font-weight:700;font-size:15px;transition:.12s;line-height:1.2;}
+  .tile.en{font-family:'Poppins';color:var(--primary)}
+  .tile:active{transform:scale(.96)}
+  .tile.sel{border-color:var(--accent);background:#FFF4EC}
+  .tile.done{opacity:0;pointer-events:none;transform:scale(.8)}
+  .tile.miss{border-color:var(--danger);background:#FFE9EC;animation:shake .3s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .add-box{background:var(--panel);border-radius:18px;padding:16px;box-shadow:var(--shadow-sm);margin-bottom:16px}
+  .field{margin-bottom:10px}
+  .field label{display:block;font-size:11px;font-weight:800;color:var(--sub);margin-bottom:5px}
+  .field input,.field select,.field textarea{width:100%;border:1.5px solid var(--border);border-radius:11px;padding:11px 13px;
+    font-family:inherit;font-size:14px;color:var(--text);background:#FCFCFE;}
+  .field textarea{resize:vertical;min-height:90px;line-height:1.5}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary-light)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .tabs{display:flex;gap:6px;background:var(--panel);border:1.5px solid var(--border);border-radius:13px;padding:4px;margin-bottom:14px}
+  .tabs button{flex:1;border:none;background:none;font-family:inherit;font-weight:800;font-size:13px;color:var(--sub);padding:9px;border-radius:9px;cursor:pointer}
+  .tabs button.on{background:var(--primary);color:#fff}
+  .word-list{display:flex;flex-direction:column;gap:8px}
+  .word-row{background:var(--panel);border-radius:13px;padding:12px 14px;box-shadow:var(--shadow-sm);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .word-row .w-en{font-family:'Poppins';font-weight:700;color:var(--primary);font-size:15px}
+  .word-row .w-ja{font-size:13px;color:var(--text);font-weight:600}
+  .word-row .w-grp{font-size:10px;color:var(--sub);font-weight:700;margin-top:2px}
+  .word-row .ops{display:flex;gap:6px;flex:0 0 auto}
+  .iconbtn{border:none;background:#F2F2FA;border-radius:9px;width:32px;height:32px;cursor:pointer;font-size:14px;color:var(--sub)}
+  .iconbtn.del:active{background:var(--danger);color:#fff}
+  .empty{text-align:center;color:var(--sub);font-weight:600;font-size:13px;padding:40px 20px;line-height:1.6}
+  .help{font-size:11px;color:var(--sub);line-height:1.6;margin-top:6px}
+  .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;
+    padding:12px 22px;border-radius:999px;font-size:13px;font-weight:700;opacity:0;transition:.25s;pointer-events:none;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.2);}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .pop{position:fixed;inset:0;pointer-events:none;z-index:40;display:flex;align-items:center;justify-content:center}
+  .pop span{position:absolute;font-size:24px;animation:fly .8s ease-out forwards}
+  @keyframes fly{0%{opacity:1;transform:translate(0,0) scale(.5)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.2)}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><div class="logo">WORD <span>UP!</span></div><div class="sub">中1 英単語トレーニング</div></div>
+    <div class="grp-pill" id="grpPill">ぜんぶ</div>
+  </div>
+  <div class="screen" id="screen"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const STORE_KEY='wordup_tomoaki_v2';
+let mem=null;
+function w(en,ja,g){return {id:'w_'+Math.random().toString(36).slice(2,9),en,ja,groupId:g,learned:false,correct:0,wrong:0}}
+
+const SEED={
+  groups:[
+    {id:'g_greet',name:'あいさつ・基本'},
+    {id:'g_people',name:'自己紹介・人'},
+    {id:'g_num',name:'数'},
+    {id:'g_week',name:'曜日'},
+    {id:'g_month',name:'月'},
+    {id:'g_color',name:'色'},
+    {id:'g_family',name:'家族'},
+    {id:'g_school',name:'学校'},
+    {id:'g_food',name:'食べ物・飲み物'},
+    {id:'g_animal',name:'動物'},
+    {id:'g_adj',name:'形容詞'},
+    {id:'g_verb',name:'動詞'},
+    {id:'g_place',name:'場所・乗り物'},
+    {id:'g_nature',name:'自然・天気・時間'},
+    {id:'g_body',name:'体'},
+    {id:'g_things',name:'身の回りのもの'},
+    {id:'g_q',name:'疑問詞'},
+    {id:'u0',name:'Unit 0'},
+    {id:'u1',name:'Unit 1'},
+    {id:'u2',name:'Unit 2'},
+    {id:'u3',name:'Unit 3'},
+    {id:'u4',name:'Unit 4'},
+    {id:'u5',name:'Unit 5'},
+    {id:'u6',name:'Unit 6'},
+    {id:'u7',name:'Unit 7'},
+    {id:'u8',name:'Unit 8'},
+  ],
+  words:[
+    w('hello','こんにちは','g_greet'),w('hi','やあ','g_greet'),w('good morning','おはよう','g_greet'),
+    w('good afternoon','こんにちは(昼)','g_greet'),w('good night','おやすみ','g_greet'),w('goodbye','さようなら','g_greet'),
+    w('thank you','ありがとう','g_greet'),w('thanks','ありがとう','g_greet'),w('please','どうぞ・お願い','g_greet'),
+    w('sorry','ごめんなさい','g_greet'),w('yes','はい','g_greet'),w('no','いいえ','g_greet'),
+    w('excuse me','すみません','g_greet'),w('welcome','ようこそ','g_greet'),
+    w('I','わたしは','g_people'),w('you','あなた(は)','g_people'),w('he','彼は','g_people'),w('she','彼女は','g_people'),
+    w('we','わたしたちは','g_people'),w('they','彼らは','g_people'),w('it','それは','g_people'),w('name','名前','g_people'),
+    w('friend','友だち','g_people'),w('people','人々','g_people'),w('boy','男の子','g_people'),w('girl','女の子','g_people'),
+    w('man','男の人','g_people'),w('woman','女の人','g_people'),w('everyone','みんな','g_people'),w('child','子ども','g_people'),
+    w('zero','0','g_num'),w('one','1','g_num'),w('two','2','g_num'),w('three','3','g_num'),w('four','4','g_num'),
+    w('five','5','g_num'),w('six','6','g_num'),w('seven','7','g_num'),w('eight','8','g_num'),w('nine','9','g_num'),
+    w('ten','10','g_num'),w('eleven','11','g_num'),w('twelve','12','g_num'),w('twenty','20','g_num'),
+    w('thirty','30','g_num'),w('fifty','50','g_num'),w('hundred','100','g_num'),
+    w('Sunday','日曜日','g_week'),w('Monday','月曜日','g_week'),w('Tuesday','火曜日','g_week'),w('Wednesday','水曜日','g_week'),
+    w('Thursday','木曜日','g_week'),w('Friday','金曜日','g_week'),w('Saturday','土曜日','g_week'),
+    w('January','1月','g_month'),w('February','2月','g_month'),w('March','3月','g_month'),w('April','4月','g_month'),
+    w('May','5月','g_month'),w('June','6月','g_month'),w('July','7月','g_month'),w('August','8月','g_month'),
+    w('September','9月','g_month'),w('October','10月','g_month'),w('November','11月','g_month'),w('December','12月','g_month'),
+    w('red','赤','g_color'),w('blue','青','g_color'),w('green','緑','g_color'),w('yellow','黄色','g_color'),
+    w('white','白','g_color'),w('black','黒','g_color'),w('pink','ピンク','g_color'),w('brown','茶色','g_color'),
+    w('orange','オレンジ','g_color'),w('purple','むらさき','g_color'),w('color','色','g_color'),
+    w('father','お父さん','g_family'),w('mother','お母さん','g_family'),w('brother','兄・弟','g_family'),
+    w('sister','姉・妹','g_family'),w('family','家族','g_family'),w('grandfather','おじいさん','g_family'),
+    w('grandmother','おばあさん','g_family'),w('parent','親','g_family'),
+    w('school','学校','g_school'),w('classroom','教室','g_school'),w('teacher','先生','g_school'),w('student','生徒','g_school'),
+    w('class','授業・クラス','g_school'),w('book','本','g_school'),w('notebook','ノート','g_school'),w('pen','ペン','g_school'),
+    w('pencil','えんぴつ','g_school'),w('desk','机','g_school'),w('chair','いす','g_school'),w('bag','かばん','g_school'),
+    w('eraser','消しゴム','g_school'),w('ruler','じょうぎ','g_school'),w('dictionary','辞書','g_school'),w('homework','宿題','g_school'),
+    w('test','テスト','g_school'),w('English','英語','g_school'),w('math','数学','g_school'),w('science','理科','g_school'),
+    w('apple','りんご','g_food'),w('banana','バナナ','g_food'),w('orange','オレンジ','g_food'),w('egg','たまご','g_food'),
+    w('milk','牛乳','g_food'),w('bread','パン','g_food'),w('rice','ごはん・米','g_food'),w('water','水','g_food'),
+    w('fish','魚','g_food'),w('meat','肉','g_food'),w('lunch','昼食','g_food'),w('breakfast','朝食','g_food'),
+    w('dinner','夕食','g_food'),w('cake','ケーキ','g_food'),w('juice','ジュース','g_food'),w('tea','お茶','g_food'),
+    w('vegetable','野菜','g_food'),w('fruit','くだもの','g_food'),
+    w('dog','犬','g_animal'),w('cat','ねこ','g_animal'),w('bird','鳥','g_animal'),w('rabbit','うさぎ','g_animal'),
+    w('horse','馬','g_animal'),w('lion','ライオン','g_animal'),w('elephant','ぞう','g_animal'),w('monkey','さる','g_animal'),
+    w('bear','くま','g_animal'),w('panda','パンダ','g_animal'),w('animal','動物','g_animal'),
+    w('big','大きい','g_adj'),w('small','小さい','g_adj'),w('good','よい','g_adj'),w('bad','悪い','g_adj'),
+    w('happy','うれしい','g_adj'),w('sad','悲しい','g_adj'),w('new','新しい','g_adj'),w('old','古い・年とった','g_adj'),
+    w('hot','暑い・熱い','g_adj'),w('cold','寒い・冷たい','g_adj'),w('long','長い','g_adj'),w('short','短い','g_adj'),
+    w('tall','背が高い','g_adj'),w('fast','速い','g_adj'),w('slow','おそい','g_adj'),w('kind','親切な','g_adj'),
+    w('cute','かわいい','g_adj'),w('fun','楽しい','g_adj'),w('easy','かんたんな','g_adj'),w('difficult','むずかしい','g_adj'),
+    w('nice','すてきな','g_adj'),w('beautiful','美しい','g_adj'),w('busy','いそがしい','g_adj'),w('tired','つかれた','g_adj'),
+    w('hungry','おなかがすいた','g_adj'),w('great','すばらしい','g_adj'),w('favorite','お気に入りの','g_adj'),
+    w('interesting','おもしろい','g_adj'),w('delicious','おいしい','g_adj'),
+    w('like','好き(です)','g_verb'),w('love','大好き(です)','g_verb'),w('play','(スポーツを)する・遊ぶ','g_verb'),
+    w('go','行く','g_verb'),w('come','来る','g_verb'),w('eat','食べる','g_verb'),w('drink','飲む','g_verb'),
+    w('run','走る','g_verb'),w('walk','歩く','g_verb'),w('study','勉強する','g_verb'),w('read','読む','g_verb'),
+    w('write','書く','g_verb'),w('see','見る・会う','g_verb'),w('look','見る','g_verb'),w('watch','(じっと)見る','g_verb'),
+    w('listen','聞く','g_verb'),w('speak','話す','g_verb'),w('want','ほしい','g_verb'),w('have','持っている','g_verb'),
+    w('make','作る','g_verb'),w('get','手に入れる','g_verb'),w('know','知っている','g_verb'),w('think','考える','g_verb'),
+    w('help','助ける','g_verb'),w('live','住む','g_verb'),w('use','使う','g_verb'),w('open','開ける','g_verb'),
+    w('sing','歌う','g_verb'),w('swim','泳ぐ','g_verb'),w('cook','料理する','g_verb'),w('enjoy','楽しむ','g_verb'),
+    w('practice','練習する','g_verb'),w('visit','訪れる','g_verb'),w('meet','会う','g_verb'),
+    w('home','家(へ)','g_place'),w('house','家','g_place'),w('room','部屋','g_place'),w('park','公園','g_place'),
+    w('station','駅','g_place'),w('library','図書館','g_place'),w('hospital','病院','g_place'),w('shop','店','g_place'),
+    w('store','店','g_place'),w('restaurant','レストラン','g_place'),w('zoo','動物園','g_place'),w('sea','海','g_place'),
+    w('mountain','山','g_place'),w('river','川','g_place'),w('town','町','g_place'),w('city','都市','g_place'),
+    w('country','国','g_place'),w('bus','バス','g_place'),w('train','電車','g_place'),w('bike','自転車','g_place'),
+    w('car','車','g_place'),
+    w('sun','太陽','g_nature'),w('moon','月','g_nature'),w('star','星','g_nature'),w('sky','空','g_nature'),
+    w('tree','木','g_nature'),w('flower','花','g_nature'),w('rain','雨','g_nature'),w('snow','雪','g_nature'),
+    w('wind','風','g_nature'),w('weather','天気','g_nature'),w('spring','春','g_nature'),w('summer','夏','g_nature'),
+    w('fall','秋','g_nature'),w('winter','冬','g_nature'),w('today','今日','g_nature'),w('tomorrow','明日','g_nature'),
+    w('yesterday','昨日','g_nature'),w('morning','朝','g_nature'),w('night','夜','g_nature'),w('time','時間','g_nature'),
+    w('day','日','g_nature'),w('year','年','g_nature'),
+    w('head','頭','g_body'),w('hair','かみの毛','g_body'),w('eye','目','g_body'),w('ear','耳','g_body'),
+    w('nose','鼻','g_body'),w('mouth','口','g_body'),w('hand','手','g_body'),w('foot','足','g_body'),
+    w('face','顔','g_body'),w('leg','足(脚)','g_body'),
+    w('phone','電話','g_things'),w('camera','カメラ','g_things'),w('clock','時計','g_things'),w('watch','うで時計','g_things'),
+    w('key','かぎ','g_things'),w('money','お金','g_things'),w('ticket','チケット','g_things'),w('present','プレゼント','g_things'),
+    w('umbrella','かさ','g_things'),w('cap','ぼうし','g_things'),w('shirt','シャツ','g_things'),w('shoes','くつ','g_things'),
+    w('ball','ボール','g_things'),w('box','箱','g_things'),w('door','ドア','g_things'),w('window','まど','g_things'),
+    w('table','テーブル','g_things'),w('bed','ベッド','g_things'),w('picture','絵・写真','g_things'),w('letter','手紙','g_things'),
+    w('music','音楽','g_things'),w('movie','映画','g_things'),w('game','ゲーム','g_things'),
+    w('what','何','g_q'),w('who','だれ','g_q'),w('where','どこ','g_q'),w('when','いつ','g_q'),
+    w('how','どうやって・どのくらい','g_q'),w('why','なぜ','g_q'),w('which','どちら','g_q'),w('whose','だれの','g_q'),
+  ]
+};
+
+function load(){
+  try{
+    const raw=localStorage.getItem(STORE_KEY);
+    if(raw) return JSON.parse(raw);
+    localStorage.setItem(STORE_KEY,JSON.stringify(SEED));
+    return JSON.parse(JSON.stringify(SEED));
+  }catch(e){ if(!mem) mem=JSON.parse(JSON.stringify(SEED)); return mem; }
+}
+function save(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }catch(e){ mem=state; } }
+let state=load();
+let currentGroup='all';
+
+const $=id=>document.getElementById(id);
+const screen=$('screen');
+function wordsOf(g){ return g==='all'?state.words:state.words.filter(x=>x.groupId===g); }
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function groupName(g){ if(g==='all')return'ぜんぶ'; const o=state.groups.find(x=>x.id===g); return o?o.name:'?'; }
+function norm(s){ return s.toLowerCase().replace(/\s+/g,' ').trim(); }
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1600); }
+function updatePill(){ $('grpPill').textContent=groupName(currentGroup); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function pop(){
+  const p=document.createElement('div');p.className='pop';const ems=['⭐','✨','🎉','💫'];
+  for(let i=0;i<8;i++){const s=document.createElement('span');s.textContent=ems[i%ems.length];
+    s.style.setProperty('--dx',(Math.random()*200-100)+'px');s.style.setProperty('--dy',(-Math.random()*160-40)+'px');p.appendChild(s);}
+  document.body.appendChild(p);setTimeout(()=>p.remove(),800);
+}
+
+function renderHome(){
+  updatePill();
+  const all=state.words,total=all.length,learned=all.filter(x=>x.learned).length;
+  const pct=total?Math.round(learned/total*100):0;
+  const C=2*Math.PI*46,off=C*(1-pct/100);
+  const chips=[{id:'all',name:'ぜんぶ'}].concat(state.groups).map(g=>{
+    const c=g.id==='all'?state.words.length:wordsOf(g.id).length;
+    return `<div class="grp-chip ${currentGroup===g.id?'on':''}" onclick="selectGroup('${g.id}')">${esc(g.name)}<small>${c}語</small></div>`;
+  }).join('');
+  screen.innerHTML=`
+    <div class="ring-card">
+      <div class="ring">
+        <svg width="104" height="104">
+          <circle cx="52" cy="52" r="46" fill="none" stroke="var(--border)" stroke-width="10"/>
+          <circle cx="52" cy="52" r="46" fill="none" stroke="var(--primary)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${off}"/>
+        </svg>
+        <div class="pct"><b>${pct}%</b><small>マスター</small></div>
+      </div>
+      <div class="ring-info"><h2>今のじょうたい</h2>
+        <div class="stat"><div>おぼえた<b>${learned}</b></div><div>ぜんぶ<b>${total}</b></div></div>
+      </div>
+    </div>
+    <div class="section-label">📚 グループをえらぶ</div>
+    <div class="grp-scroll">${chips}</div>
+    <div class="section-label">🎯 トレーニング</div>
+    <div class="modes">
+      <div class="mode flash" onclick="startFlash()"><div class="ic">🃏</div><h3>フラッシュカード</h3><p>カードをめくって覚える</p></div>
+      <div class="mode quiz" onclick="startQuiz()"><div class="ic">✏️</div><h3>4択クイズ</h3><p>意味を当ててチェック</p></div>
+      <div class="mode game" onclick="startGame()"><div class="ic">⚡</div><h3>マッチング</h3><p>ペアをそろえてタイムを競う</p></div>
+      <div class="mode spell" onclick="startSpell()"><div class="ic">✍️</div><h3>書いて覚える</h3><p>意味を見て英語を入力</p></div>
+    </div>
+    <div class="manage-btn" onclick="renderManage()">
+      <div class="ic">➕</div>
+      <div><h3>単語をふやす・編集する</h3><p>教科書に合わせて登録／Unitグループに追加</p></div>
+    </div>`;
+}
+function selectGroup(g){ currentGroup=g; renderHome(); }
+
+/* フラッシュカード */
+let fc={list:[],i:0,flipped:false,dir:'en'};
+function startFlash(){ const list=wordsOf(currentGroup); if(!list.length){toast('このグループに単語がないよ');return;} fc={list:shuffle(list),i:0,flipped:false,dir:'en'}; renderFlash(); }
+function renderFlash(){
+  const c=fc.list[fc.i];
+  const front=fc.dir==='en'?c.en:c.ja, back=fc.dir==='en'?c.ja:c.en;
+  const show=fc.flipped?back:front;
+  const cls=(fc.flipped?(fc.dir==='en'?'ja':'en'):(fc.dir==='en'?'en':'ja'));
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="mode-head"><h2>🃏 フラッシュカード</h2><span class="counter">${fc.i+1}/${fc.list.length}</span></div>
+    <div class="progress-line"><i style="width:${(fc.i+1)/fc.list.length*100}%"></i></div>
+    <div class="toggle-row"><div class="seg">
+      <button class="${fc.dir==='en'?'on':''}" onclick="fcDir('en')">英 → 日</button>
+      <button class="${fc.dir==='ja'?'on':''}" onclick="fcDir('ja')">日 → 英</button>
+    </div></div>
+    <div style="height:14px"></div>
+    <div class="flash-wrap">
+      <div class="card ${c.learned?'learned-mark':''}" onclick="fcFlip()">
+        <span class="tag">${esc(groupName(c.groupId))}</span>
+        <div class="${cls}">${esc(show)}</div>
+        <span class="tap-hint">${fc.flipped?'タップでもどる':'タップで答え'}</span>
+      </div>
+      <div class="flash-mark">
+        <button class="btn ${c.learned?'btn-ghost':'btn-primary'}" onclick="fcLearn(true)">✓ おぼえた</button>
+        <button class="btn btn-ghost" onclick="fcLearn(false)">まだ</button>
+      </div>
+      <div class="flash-nav">
+        <button class="btn btn-ghost" onclick="fcMove(-1)">‹ 前</button>
+        <button class="btn btn-ghost" onclick="fcMove(1)">次 ›</button>
+      </div>
+    </div>`;
+}
+function fcFlip(){ fc.flipped=!fc.flipped; renderFlash(); }
+function fcDir(d){ fc.dir=d; fc.flipped=false; renderFlash(); }
+function fcMove(n){ fc.i=(fc.i+n+fc.list.length)%fc.list.length; fc.flipped=false; renderFlash(); }
+function fcLearn(v){
+  const c=fc.list[fc.i],real=state.words.find(x=>x.id===c.id);
+  if(real){real.learned=v;c.learned=v;} save();
+  if(v&&fc.i<fc.list.length-1){fc.i++;fc.flipped=false;}
+  renderFlash(); if(v) toast('ナイス！おぼえたね 🎉');
+}
+
+/* クイズ */
+let qz={list:[],i:0,score:0,miss:[],dir:'en',answered:false};
+function startQuiz(){ const list=wordsOf(currentGroup); if(list.length<4){toast('クイズは4語以上で遊べるよ');return;} qz={list:shuffle(list).slice(0,Math.min(10,list.length)),i:0,score:0,miss:[],dir:'en',answered:false}; renderQuiz(); }
+function renderQuiz(){
+  if(qz.i>=qz.list.length) return renderQuizResult();
+  const c=qz.list[qz.i],askEn=qz.dir==='en';
+  const question=askEn?c.en:c.ja;
+  const pool=state.words.filter(x=>x.id!==c.id);
+  const opts=shuffle([c,...shuffle(pool).slice(0,3)]);
+  const ct=x=>askEn?x.ja:x.en;
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="mode-head"><h2>✏️ クイズ</h2><span class="quiz-score">⭐ ${qz.score}</span></div>
+    <div class="progress-line"><i style="width:${qz.i/qz.list.length*100}%"></i></div>
+    <div class="q-card"><div class="qlabel">${askEn?'この単語の意味は？':'これを英語で言うと？'}</div>
+      <div class="qword ${askEn?'':'ja'}">${esc(question)}</div></div>
+    <div class="choices">
+      ${opts.map(x=>`<button class="choice" data-id="${x.id}" onclick="answerQuiz('${x.id}','${c.id}')">${esc(ct(x))}</button>`).join('')}
+    </div>`;
+}
+function answerQuiz(picked,correctId){
+  if(qz.answered)return; qz.answered=true;
+  const c=qz.list[qz.i],real=state.words.find(x=>x.id===c.id),ok=picked===correctId;
+  document.querySelectorAll('.choice').forEach(b=>{
+    const id=b.dataset.id;
+    if(id===correctId)b.classList.add('correct');
+    else if(id===picked)b.classList.add('wrong'); else b.classList.add('dim');
+    b.onclick=null;
+  });
+  if(ok){qz.score++;if(real)real.correct++;pop();} else {qz.miss.push(c);if(real)real.wrong++;}
+  save();
+  setTimeout(()=>{qz.i++;qz.answered=false;renderQuiz();},ok?700:1300);
+}
+function renderQuizResult(){
+  const total=qz.list.length,rate=Math.round(qz.score/total*100);
+  let emoji='💪',msg='その調子！';
+  if(rate===100){emoji='🏆';msg='ぜんぶ正解！すごい！';}
+  else if(rate>=80){emoji='🎉';msg='よくできました！';}
+  else if(rate>=50){emoji='👍';msg='いい感じ、あと少し！';}
+  else{emoji='📖';msg='くりかえしが力になるよ';}
+  const miss=qz.miss.length?`<div class="section-label" style="margin-top:6px">まちがえた単語</div>
+    <div class="miss-list">${qz.miss.map(x=>`<div class="row"><b>${esc(x.en)}</b><span>${esc(x.ja)}</span></div>`).join('')}</div>`:'';
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="result"><div class="emoji">${emoji}</div>
+      <div class="big">${qz.score}<span style="font-size:28px;color:var(--sub)">/${total}</span></div>
+      <h2>${msg}</h2><p>正答率 ${rate}%</p></div>
+    ${miss}
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="renderHome()">ホーム</button>
+      <button class="btn btn-primary" onclick="startQuiz()">もう一回</button></div>`;
+}
+
+/* 書いて覚える */
+let sp={list:[],i:0,score:0,miss:[],answered:false};
+function startSpell(){ const list=wordsOf(currentGroup); if(!list.length){toast('このグループに単語がないよ');return;} sp={list:shuffle(list).slice(0,Math.min(10,list.length)),i:0,score:0,miss:[],answered:false}; renderSpell(); }
+function renderSpell(){
+  if(sp.i>=sp.list.length) return renderSpellResult();
+  const c=sp.list[sp.i];
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="mode-head"><h2>✍️ 書いて覚える</h2><span class="quiz-score">⭐ ${sp.score}</span></div>
+    <div class="progress-line"><i style="width:${sp.i/sp.list.length*100}%"></i></div>
+    <div class="q-card"><div class="qlabel">この意味を英語で書こう</div>
+      <div class="qword ja">${esc(c.ja)}</div>
+      <div id="spHint" style="font-family:Poppins;letter-spacing:5px;color:var(--sub);font-size:18px;margin-top:12px;min-height:24px"></div>
+    </div>
+    <div class="field"><input id="spInput" placeholder="ここに英語を入力" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkSpell()"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-ghost" onclick="spellHint()">💡 ヒント</button>
+      <button class="btn btn-primary" onclick="checkSpell()">こたえる</button>
+    </div>
+    <div id="spFeedback" style="margin-top:16px"></div>`;
+  setTimeout(()=>{const el=$('spInput');if(el)el.focus();},60);
+}
+function spellHint(){
+  const c=sp.list[sp.i];
+  const shown=c.en.split('').map((ch,i)=>ch===' '?'·':(i===0?ch:'_')).join(' ');
+  $('spHint').textContent=shown+`  (${c.en.replace(/ /g,'').length}文字)`;
+}
+function checkSpell(){
+  if(sp.answered)return;
+  const c=sp.list[sp.i],val=$('spInput').value;
+  if(!val.trim()){toast('英語を入力してね');return;}
+  sp.answered=true;
+  const ok=norm(val)===norm(c.en),real=state.words.find(x=>x.id===c.id),fb=$('spFeedback');
+  if(ok){ sp.score++; if(real)real.correct++; pop();
+    fb.innerHTML=`<div style="background:var(--success);color:#fff;border-radius:14px;padding:16px;text-align:center;font-weight:800;font-size:16px">⭕ せいかい！　<span style="font-family:Poppins">${esc(c.en)}</span></div>`;
+  }else{ sp.miss.push(c); if(real)real.wrong++;
+    fb.innerHTML=`<div style="background:#FFF0F2;border:1.5px solid var(--danger);border-radius:14px;padding:16px;text-align:center">
+      <div style="color:var(--danger);font-weight:800;margin-bottom:6px">❌ おしい！ せいかいは…</div>
+      <div style="font-family:Poppins;font-size:26px;font-weight:700;color:var(--text)">${esc(c.en)}</div></div>`;
+  }
+  save();
+  const inp=$('spInput'); if(inp) inp.disabled=true;
+  fb.innerHTML+=`<button class="btn btn-primary" style="margin-top:12px" onclick="nextSpell()">次へ ›</button>`;
+}
+function nextSpell(){ sp.i++; sp.answered=false; renderSpell(); }
+function renderSpellResult(){
+  const total=sp.list.length,rate=Math.round(sp.score/total*100);
+  let emoji='✍️',msg='よく書けました！';
+  if(rate===100){emoji='🏆';msg='ぜんぶ正解！スペル完璧！';}
+  else if(rate>=80){emoji='🎉';msg='よくできました！';}
+  else if(rate>=50){emoji='👍';msg='その調子、くりかえそう！';}
+  else{emoji='📖';msg='書いて覚えるのが一番の近道だよ';}
+  const miss=sp.miss.length?`<div class="section-label" style="margin-top:6px">まちがえた単語</div>
+    <div class="miss-list">${sp.miss.map(x=>`<div class="row"><b>${esc(x.en)}</b><span>${esc(x.ja)}</span></div>`).join('')}</div>`:'';
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="result"><div class="emoji">${emoji}</div>
+      <div class="big">${sp.score}<span style="font-size:28px;color:var(--sub)">/${total}</span></div>
+      <h2>${msg}</h2><p>正答率 ${rate}%</p></div>
+    ${miss}
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="renderHome()">ホーム</button>
+      <button class="btn btn-primary" onclick="startSpell()">もう一回</button></div>`;
+}
+
+/* マッチング */
+let gm={pairs:[],sel:null,done:0,t:0,timer:null,need:0};
+function startGame(){
+  const list=wordsOf(currentGroup); if(list.length<3){toast('マッチングは3語以上で遊べるよ');return;}
+  const pick=shuffle(list).slice(0,Math.min(6,list.length));
+  gm={pairs:pick,sel:null,done:0,t:0,timer:null,need:pick.length};
+  renderGame();
+  clearInterval(gm.timer);
+  gm.timer=setInterval(()=>{gm.t++;const el=$('gmTimer');if(el)el.textContent=fmt(gm.t);else clearInterval(gm.timer);},1000);
+}
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m>0?m+':':'')+(m>0?String(x).padStart(2,'0'):x)+(m>0?'':'秒');}
+function renderGame(){
+  const ens=gm.pairs.map(p=>({id:p.id,text:p.en,type:'en'}));
+  const jas=gm.pairs.map(p=>({id:p.id,text:p.ja,type:'ja'}));
+  const tiles=shuffle(ens.concat(jas));
+  screen.innerHTML=`
+    <button class="back" onclick="stopGame()">‹ もどる</button>
+    <div class="mode-head"><h2>⚡ マッチング</h2></div>
+    <div class="game-top"><span class="left">のこり ${gm.need-gm.done} ペア</span><span class="timer" id="gmTimer">${fmt(gm.t)}</span></div>
+    <div class="match-grid" id="grid">
+      ${tiles.map(t=>`<div class="tile ${t.type}" data-id="${t.id}" data-type="${t.type}" onclick="tapTile(this)">${esc(t.text)}</div>`).join('')}
+    </div>`;
+}
+function tapTile(el){
+  if(el.classList.contains('done')||el.classList.contains('sel'))return;
+  if(!gm.sel){gm.sel=el;el.classList.add('sel');return;}
+  const a=gm.sel,b=el;
+  if(a.dataset.type===b.dataset.type){a.classList.remove('sel');gm.sel=b;b.classList.add('sel');return;}
+  if(a.dataset.id===b.dataset.id){
+    a.classList.add('done');b.classList.add('done');gm.sel=null;gm.done++;pop();
+    const left=document.querySelector('.left');if(left)left.textContent=`のこり ${gm.need-gm.done} ペア`;
+    if(gm.done>=gm.need)finishGame();
+  }else{
+    b.classList.add('miss');a.classList.add('miss');const a2=a,b2=b;gm.sel=null;
+    setTimeout(()=>{a2.classList.remove('miss','sel');b2.classList.remove('miss');},350);
+  }
+}
+function stopGame(){ clearInterval(gm.timer); renderHome(); }
+function finishGame(){
+  clearInterval(gm.timer);
+  setTimeout(()=>{ screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="result"><div class="emoji">⚡</div><div class="big">${fmt(gm.t)}</div><h2>クリア！</h2><p>${gm.need}ペア そろえたよ</p></div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="renderHome()">ホーム</button>
+      <button class="btn btn-primary" onclick="startGame()">もう一回</button></div>`; },400);
+}
+
+/* 単語管理 */
+let mngTab='list';
+function renderManage(){
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="mode-head"><h2>➕ 単語をふやす</h2></div>
+    <div class="tabs">
+      <button class="${mngTab==='list'?'on':''}" onclick="mngSwitch('list')">一覧</button>
+      <button class="${mngTab==='add'?'on':''}" onclick="mngSwitch('add')">1語ずつ</button>
+      <button class="${mngTab==='bulk'?'on':''}" onclick="mngSwitch('bulk')">まとめて</button>
+      <button class="${mngTab==='grp'?'on':''}" onclick="mngSwitch('grp')">グループ</button>
+    </div>
+    <div id="mngBody"></div>`;
+  renderMngBody();
+}
+function mngSwitch(t){ mngTab=t; renderManage(); }
+function grpOptions(sel){ return state.groups.map(g=>`<option value="${g.id}" ${g.id===sel?'selected':''}>${esc(g.name)}</option>`).join(''); }
+function renderMngBody(){
+  const body=$('mngBody');
+  if(mngTab==='add'){
+    body.innerHTML=`
+      <div class="add-box">
+        <div class="row2">
+          <div class="field"><label>英語</label><input id="addEn" placeholder="apple" autocapitalize="off"></div>
+          <div class="field"><label>日本語</label><input id="addJa" placeholder="りんご"></div>
+        </div>
+        <div class="field"><label>グループ</label><select id="addGrp">${grpOptions(currentGroup!=='all'?currentGroup:state.groups[0].id)}</select></div>
+        <button class="btn btn-primary" onclick="addOne()">追加する</button>
+      </div>
+      <p class="help">教科書のUnitに合わせて登録するなら、グループで「Unit 1」などを選んでね。</p>`;
+  }else if(mngTab==='bulk'){
+    body.innerHTML=`
+      <div class="add-box">
+        <div class="field"><label>グループ</label><select id="bulkGrp">${grpOptions(currentGroup!=='all'?currentGroup:'u1')}</select></div>
+        <div class="field"><label>単語リスト（1行に1つ）</label>
+          <textarea id="bulkText" placeholder="apple りんご&#10;dog 犬&#10;run 走る&#10;&#10;※ 英語と日本語の間は スペース か カンマ で区切る"></textarea></div>
+        <button class="btn btn-primary" onclick="addBulk()">まとめて追加</button>
+      </div>
+      <p class="help">NEW HORIZON の教科書を見ながら「英語 日本語」を改行で並べて貼り付ければ、一気に登録できるよ。区切りはスペースでもカンマ(,)でもOK。</p>`;
+  }else if(mngTab==='grp'){
+    body.innerHTML=`
+      <div class="add-box">
+        <div class="field"><label>新しいグループ名</label><input id="grpName" placeholder="例：Unit 9 / 不規則動詞"></div>
+        <button class="btn btn-primary" onclick="addGroup()">グループを作る</button>
+      </div>
+      <p class="help" style="margin-bottom:10px">✏️ で名前を変えられる（例：「Unit 1」→「Unit 1 Hello, everyone」）。🗑 で削除。</p>
+      <div class="word-list">
+        ${state.groups.map(g=>`<div class="word-row">
+          <div><div class="w-ja" style="font-size:14px">${esc(g.name)}</div><div class="w-grp">${wordsOf(g.id).length}語</div></div>
+          <div class="ops">
+            <button class="iconbtn" onclick="renameGroup('${g.id}')">✏️</button>
+            <button class="iconbtn del" onclick="delGroup('${g.id}')">🗑</button>
+          </div></div>`).join('')}
+      </div>`;
+  }else{
+    const list=wordsOf(currentGroup);
+    if(!list.length){ body.innerHTML=`<div class="empty">「${esc(groupName(currentGroup))}」にはまだ単語がないよ。<br>「1語ずつ」か「まとめて」から追加しよう。</div>`; return; }
+    body.innerHTML=`
+      <p class="help" style="margin-bottom:10px">表示中：<b style="color:var(--primary)">${esc(groupName(currentGroup))}</b>（${list.length}語）ホームでグループを切りかえられるよ。</p>
+      <div class="word-list">
+        ${list.map(x=>`<div class="word-row">
+          <div><span class="w-en">${esc(x.en)}</span> <span class="w-ja">${esc(x.ja)}</span><div class="w-grp">${esc(groupName(x.groupId))}${x.learned?' ・✓おぼえた':''}</div></div>
+          <div class="ops"><button class="iconbtn del" onclick="delWord('${x.id}')">🗑</button></div>
+        </div>`).join('')}
+      </div>`;
+  }
+}
+function addOne(){
+  const en=$('addEn').value.trim(),ja=$('addJa').value.trim(),g=$('addGrp').value;
+  if(!en||!ja){toast('英語と日本語の両方を入れてね');return;}
+  state.words.push(w(en,ja,g)); save(); toast('追加したよ ✓');
+  $('addEn').value='';$('addJa').value='';$('addEn').focus();
+}
+function addBulk(){
+  const g=$('bulkGrp').value;
+  const lines=$('bulkText').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  let n=0;
+  lines.forEach(l=>{
+    const parts=l.includes(',')?l.split(','):l.split(/\s+/);
+    if(parts.length>=2){const en=parts[0].trim(),ja=parts.slice(1).join(' ').trim();if(en&&ja){state.words.push(w(en,ja,g));n++;}}
+  });
+  save(); toast(n?`${n}語 追加したよ 🎉`:'うまく読めなかったみたい');
+  if(n){mngTab='list';currentGroup=g;renderManage();}
+}
+function addGroup(){
+  const name=$('grpName').value.trim();
+  if(!name){toast('グループ名を入れてね');return;}
+  state.groups.push({id:'g_'+Math.random().toString(36).slice(2,8),name}); save(); toast('グループを作ったよ ✓'); renderManage();
+}
+function renameGroup(id){
+  const g=state.groups.find(x=>x.id===id); if(!g)return;
+  const name=prompt('グループ名を変更',g.name);
+  if(name&&name.trim()){g.name=name.trim();save();renderManage();}
+}
+function delGroup(id){
+  const cnt=wordsOf(id).length;
+  if(!confirm(`「${groupName(id)}」を消す？\n中の${cnt}語も一緒に消えるよ。`))return;
+  state.groups=state.groups.filter(g=>g.id!==id);
+  state.words=state.words.filter(x=>x.groupId!==id);
+  if(currentGroup===id)currentGroup='all';
+  save(); renderManage();
+}
+function delWord(id){ state.words=state.words.filter(x=>x.id!==id); save(); renderMngBody(); }
+
+renderHome();
+</script>
+</body>
+</html>
