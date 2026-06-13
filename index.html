@@ -51,6 +51,9 @@
   .grp-chip small{display:block;font-size:10px;color:var(--sub);font-weight:600;margin-top:1px}
   .grp-chip.on{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:var(--shadow-sm)}
   .grp-chip.on small{color:rgba(255,255,255,.8)}
+  .grp-chip.weak{border-color:var(--danger);color:var(--danger)}
+  .grp-chip.weak.on{background:var(--danger);border-color:var(--danger);color:#fff}
+  .grp-chip.weak.on small{color:rgba(255,255,255,.85)}
   .modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
   .mode{background:var(--panel);border-radius:20px;padding:20px 16px;cursor:pointer;
     box-shadow:var(--shadow-sm);border:1.5px solid transparent;transition:.15s;display:flex;flex-direction:column;gap:8px;}
@@ -301,9 +304,11 @@ let currentGroup='all';
 
 const $=id=>document.getElementById(id);
 const screen=$('screen');
-function wordsOf(g){ return g==='all'?state.words:state.words.filter(x=>x.groupId===g); }
+function isWeak(x){ return x.wrong>0 && x.correct<=x.wrong; }
+function weakWords(){ return state.words.filter(isWeak); }
+function wordsOf(g){ if(g==='all')return state.words; if(g==='review')return weakWords(); return state.words.filter(x=>x.groupId===g); }
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function groupName(g){ if(g==='all')return'ぜんぶ'; const o=state.groups.find(x=>x.id===g); return o?o.name:'?'; }
+function groupName(g){ if(g==='all')return'ぜんぶ'; if(g==='review')return'苦手な単語'; const o=state.groups.find(x=>x.id===g); return o?o.name:'?'; }
 function norm(s){ return s.toLowerCase().replace(/\s+/g,' ').trim(); }
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1600); }
 function updatePill(){ $('grpPill').textContent=groupName(currentGroup); }
@@ -320,7 +325,9 @@ function renderHome(){
   const all=state.words,total=all.length,learned=all.filter(x=>x.learned).length;
   const pct=total?Math.round(learned/total*100):0;
   const C=2*Math.PI*46,off=C*(1-pct/100);
-  const chips=[{id:'all',name:'ぜんぶ'}].concat(state.groups).map(g=>{
+  const weakN=weakWords().length;
+  const weakChip=weakN>0?`<div class="grp-chip weak ${currentGroup==='review'?'on':''}" onclick="selectGroup('review')">⚠️ 苦手だけ<small>${weakN}語</small></div>`:'';
+  const chips=weakChip+[{id:'all',name:'ぜんぶ'}].concat(state.groups).map(g=>{
     const c=g.id==='all'?state.words.length:wordsOf(g.id).length;
     return `<div class="grp-chip ${currentGroup===g.id?'on':''}" onclick="selectGroup('${g.id}')">${esc(g.name)}<small>${c}語</small></div>`;
   }).join('');
