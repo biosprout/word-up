@@ -399,8 +399,9 @@ function fcMove(n){ fc.i=(fc.i+n+fc.list.length)%fc.list.length; fc.flipped=fals
 function fcLearn(v){
   const c=fc.list[fc.i],real=state.words.find(x=>x.id===c.id);
   if(real){real.learned=v;c.learned=v;} save();
-  if(v&&fc.i<fc.list.length-1){fc.i++;fc.flipped=false;}
-  renderFlash(); if(v) toast('ナイス！おぼえたね 🎉');
+  if(fc.i<fc.list.length-1){fc.i++;fc.flipped=false;}
+  renderFlash();
+  toast(v?'ナイス！おぼえたね 🎉':'OK、あとでまた出すね');
 }
 
 /* クイズ */
