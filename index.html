@@ -418,7 +418,8 @@ function touchStreak(){
   const ys=y.getFullYear()+'-'+String(y.getMonth()+1).padStart(2,'0')+'-'+String(y.getDate()).padStart(2,'0');
   state.streak.count=(state.streak.day===ys)?state.streak.count+1:1;
   state.streak.day=t;save();
-  if(state.streak.count>=2)toast('🔥 '+state.streak.count+'日れんぞく！');
+  if(state.streak.count%5===0){toast('🔥 '+state.streak.count+'日れんぞく達成！');grantTicket(1);}
+  else if(state.streak.count>=2)toast('🔥 '+state.streak.count+'日れんぞく！');
   checkAch();
 }
 function addXp(n){
@@ -856,7 +857,7 @@ function renderTickets(){
       <div style="font-size:12px;font-weight:700">1枚 = ${esc(state.ticketLabel)}</div>
     </div>
     <button class="btn btn-accent" ${left?'':'disabled style="opacity:.5"'} onclick="useTicket()">1枚つかう（おうちの人に見せてね）</button>
-    <p class="help">レベルアップで1枚、実績かいじょで1枚もらえるよ。つかうときは、この画面をおうちの人に見せてから「つかう」を押そう。</p>
+    <p class="help">レベルアップで1枚、実績かいじょで1枚、れんぞく学習5日ごとに1枚もらえるよ。つかうときは、この画面をおうちの人に見せてから「つかう」を押そう。</p>
     <button class="btn btn-ghost" style="margin-top:10px;font-size:13px;padding:12px" onclick="editTicketLabel()">⚙ 券の内容をへんこう（おうちの人向け）</button>
     ${state.tickets.used.length?`<div class="section-label" style="margin-top:14px">つかった記ろく</div>
     <div class="word-list">${state.tickets.used.slice().reverse().slice(0,10).map(u=>`<div class="word-row"><div><span class="w-ja">🎟 ${esc(u.l)}</span><div class="w-grp">${esc(u.d)}</div></div></div>`).join('')}</div>`:''}
