@@ -65,6 +65,7 @@
   .mode.quiz .ic{background:#FFE9DB}
   .mode.game .ic{background:#DEF7F0}
   .mode.spell .ic{background:#E3F0FF}
+  .mode.listen .ic{background:#FFF3D6}
   .ach-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
   .achb{background:var(--panel);border:1.5px solid var(--border);border-radius:12px;padding:9px 8px;opacity:.55}
   .achb.got{opacity:1;border-color:var(--accent);background:#FFF8EE}
@@ -405,6 +406,9 @@ const ACH=[
  {id:'ta15',name:'スピードキング',desc:'タイムアタック15問'},
 ];
 function lvlInfo(xp){let l=1,need=100,acc=0;while(xp>=acc+need){acc+=need;l++;need=100*l;}return{level:l,cur:xp-acc,need};}
+if(!state.tickets){state.tickets={earned:Math.max(0,lvlInfo(state.xp).level-1)+state.ach.length,used:[]};save();}
+function ticketsLeft(){return state.tickets.earned-state.tickets.used.length;}
+function grantTicket(n){state.tickets.earned+=n;save();setTimeout(()=>toast('🎟 ごほうび券ゲット！（のこり'+ticketsLeft()+'枚）'),1100);}
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function touchStreak(){
   const t=todayStr();if(state.streak.day===t)return;
@@ -420,7 +424,7 @@ function addXp(n){
   state.xp+=n;
   const after=lvlInfo(state.xp).level;
   save();
-  if(after>before){pop(20);setTimeout(()=>toast('🎉 レベル'+after+'になった！'),350);}
+  if(after>before){pop(20);setTimeout(()=>toast('🎉 レベル'+after+'になった！'),350);grantTicket(after-before);}
   checkAch();
 }
 function unlock(id){
@@ -428,6 +432,7 @@ function unlock(id){
   state.ach.push(id);save();
   const a=ACH.find(x=>x.id===id);
   setTimeout(()=>toast('🏅 実績かいじょ: '+(a?a.name:id)),700);
+  grantTicket(1);
 }
 function checkAch(){
   const learned=state.words.filter(x=>x.learned).length;
@@ -456,6 +461,11 @@ function norm(s){ return s.toLowerCase().replace(/\s+/g,' ').trim(); }
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1600); }
 function updatePill(){ $('grpPill').textContent=groupName(currentGroup); }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function speak(text,rate){ try{ if(!('speechSynthesis' in window))return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=rate||.9; speechSynthesis.speak(u); }catch(e){} }
+function speakCur(){ const c=fc.list[fc.i]; if(c)speak(c.en); }
+function speakQuiz(){ const c=qz.list[qz.i]; if(c)speak(c.en); }
+function speakSp(){ const c=sp.list[sp.i]; if(c)speak(c.en); }
+function speakLs(){ const c=ls.list[ls.i]; if(c)speak(c.en); }
 function pop(){
   const p=document.createElement('div');p.className='pop';const ems=['⭐','✨','🎉','💫'];
   for(let i=0;i<8;i++){const s=document.createElement('span');s.textContent=ems[i%ems.length];
@@ -499,6 +509,7 @@ function renderHome(){
         <div style="font-size:10px;color:var(--sub);font-weight:700;text-align:right">あと ${lvlInfo(state.xp).need-lvlInfo(state.xp).cur} XP でレベルアップ</div>
       </div>
     </div>
+    <button class="btn btn-ghost" style="margin-bottom:4px;display:flex;justify-content:space-between;align-items:center" onclick="renderTickets()"><span>🎟 ごほうび券</span><span style="font-family:Poppins;font-weight:800;color:var(--accent)">${ticketsLeft()}枚</span></button>
     <div class="section-label">🎯 トレーニング</div>
     <div class="toggle-row" style="justify-content:flex-start;margin-bottom:12px"><span style="font-size:11px;color:var(--sub);font-weight:700;margin-right:8px">1回の問題数</span><div class="seg">
       <button class="${quizCount===10?'on':''}" onclick="setCount(10)">10問</button>
@@ -510,6 +521,7 @@ function renderHome(){
       <div class="mode quiz" onclick="startQuiz()"><div class="ic">✏️</div><h3>4択クイズ</h3><p>意味を当ててチェック</p></div>
       <div class="mode game" onclick="startGame()"><div class="ic">⚡</div><h3>マッチング</h3><p>ペアをそろえてタイムを競う</p></div>
       <div class="mode spell" onclick="startSpell()"><div class="ic">✍️</div><h3>書いて覚える</h3><p>意味を見て英語を入力</p></div>
+      <div class="mode listen" style="grid-column:1/-1" onclick="startLs()"><div class="ic">👂</div><h3>リスニング</h3><p>音だけ聞いて、選ぶ・書く</p></div>
     </div>
     <button class="btn btn-accent" style="margin-top:12px" onclick="startTA()">⚡ タイムアタック（60秒で何問？）${state.best.ta?` ベスト:${state.best.ta}問`:''}</button>
     <div class="section-label" style="margin-top:16px">🏅 実績（${state.ach.length}/${ACH.length}）</div>
@@ -548,6 +560,7 @@ function renderFlash(){
         <div class="${cls}">${esc(show)}</div>
         <span class="tap-hint">${fc.flipped?'タップでもどる':'タップで答え'}</span>
       </div>
+      <button class="btn btn-ghost" onclick="speakCur()">🔊 発音を聞く</button>
       <div class="flash-mark">
         <button class="btn ${c.learned?'btn-ghost':'btn-primary'}" onclick="fcLearn(true)">✓ おぼえた</button>
         <button class="btn btn-ghost" onclick="fcLearn(false)">まだ</button>
@@ -586,7 +599,7 @@ function renderQuiz(){
     <div class="mode-head"><h2>✏️ クイズ</h2><span class="quiz-score">${qz.combo>=2?`<span class="combo-tag">🔥${qz.combo} </span>`:''}⭐ ${qz.score}</span></div>
     <div class="progress-line"><i style="width:${qz.i/qz.list.length*100}%"></i></div>
     <div class="q-card"><div class="qlabel">${askEn?'この単語の意味は？':'これを英語で言うと？'}</div>
-      <div class="qword ${askEn?'':'ja'}">${esc(question)}</div></div>
+      <div class="qword ${askEn?'':'ja'}">${esc(question)}</div>${askEn?'<div style="margin-top:14px"><button class="btn btn-ghost" style="max-width:180px;margin:0 auto" onclick="speakQuiz()">🔊 発音</button></div>':''}</div>
     <div class="choices">
       ${opts.map(x=>`<button class="choice" data-id="${x.id}" onclick="answerQuiz('${x.id}','${c.id}')">${esc(ct(x))}</button>`).join('')}
     </div>`;
@@ -740,7 +753,7 @@ function checkSpell(){
       addXp(15+(sp.combo>=5?10:sp.combo>=3?5:0));touchStreak(); }
     pop(sp.combo>=3?14:8);
     fb.innerHTML=`<div style="background:var(--success);color:#fff;border-radius:14px;padding:16px;text-align:center;font-weight:800;font-size:16px">⭕ せいかい！　<span style="font-family:Poppins">${esc(c.en)}</span></div>
-      <button class="btn btn-primary" style="margin-top:12px" onclick="nextSpell()">次へ ›</button>`;
+      <div style="display:flex;gap:10px;margin-top:12px"><button class="btn btn-ghost" onclick="speakSp()">🔊 発音</button><button class="btn btn-primary" onclick="nextSpell()">次へ ›</button></div>`;
   }else{
     if(!sp.retry){ sp.combo=0; sp.miss.push(c); if(real)real.wrong++; }
     fb.innerHTML=`<div style="background:#FFF0F2;border:1.5px solid var(--danger);border-radius:14px;padding:16px;text-align:center">
@@ -748,7 +761,8 @@ function checkSpell(){
       <div style="font-family:Poppins;font-size:26px;font-weight:700;color:var(--text)">${esc(c.en)}</div>
       <div style="font-size:12px;color:var(--sub);font-weight:600;margin-top:8px">きみの答え: ${esc(val)}</div></div>
       <div style="display:flex;gap:10px;margin-top:12px">
-        <button class="btn btn-accent" onclick="retrySpell()">✍️ もう一度書く</button>
+        <button class="btn btn-ghost" style="flex:0 0 auto;width:auto;padding:15px 14px" onclick="speakSp()">🔊</button>
+        <button class="btn btn-accent" onclick="retrySpell()">✍️ もう一度</button>
         <button class="btn btn-ghost" onclick="nextSpell()">次へ ›</button></div>`;
   }
   save();
@@ -822,6 +836,136 @@ function finishGame(){
     <div style="display:flex;gap:10px;margin-top:8px">
       <button class="btn btn-ghost" onclick="renderHome()">ホーム</button>
       <button class="btn btn-primary" onclick="startGame()">もう一回</button></div>`; },400);
+}
+
+/* ごほうび券 */
+function renderTickets(){
+  const left=ticketsLeft();
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="mode-head"><h2>🎟 ごほうび券</h2></div>
+    <div class="ring-card" style="flex-direction:column;text-align:center;gap:6px">
+      <div style="font-size:12px;color:var(--sub);font-weight:700">つかえる券</div>
+      <div style="font-family:Poppins;font-size:52px;font-weight:800;color:var(--accent);line-height:1">${left}<span style="font-size:20px;color:var(--sub)">枚</span></div>
+      <div style="font-size:12px;font-weight:700">1枚 = ゲーム30分（Switchなど）</div>
+    </div>
+    <button class="btn btn-accent" ${left?'':'disabled style="opacity:.5"'} onclick="useTicket()">1枚つかう（おうちの人に見せてね）</button>
+    <p class="help">レベルアップで1枚、実績かいじょで1枚もらえるよ。つかうときは、この画面をおうちの人に見せてから「つかう」を押そう。</p>
+    ${state.tickets.used.length?`<div class="section-label" style="margin-top:14px">つかった記ろく</div>
+    <div class="word-list">${state.tickets.used.slice().reverse().slice(0,10).map(u=>`<div class="word-row"><div><span class="w-ja">🎮 ゲーム30分</span><div class="w-grp">${u}</div></div></div>`).join('')}</div>`:''}
+  `;
+}
+function useTicket(){
+  if(ticketsLeft()<=0){toast('券がないよ。レベルアップでゲット！');return;}
+  if(!confirm('ごほうび券を1枚つかう？\n（ゲーム30分）'))return;
+  const d=new Date();
+  state.tickets.used.push(d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'));
+  save();pop(12);toast('🎮 ゲーム30分けん、つかったよ！');renderTickets();
+}
+
+/* リスニング */
+let ls={list:[],i:0,score:0,miss:[],mode:'choice',answered:false,combo:0,maxCombo:0,revealed:false};
+function startLs(){
+  const list=wordsOf(currentGroup);
+  if(list.length<4){toast('リスニングは4語以上で遊べるよ');return;}
+  const n=quizCount==='all'?list.length:Math.min(quizCount,list.length);
+  ls={list:shuffle(list).slice(0,n),i:0,score:0,miss:[],mode:ls.mode||'choice',answered:false,combo:0,maxCombo:0,revealed:false};
+  renderLs();
+}
+function lsMode(m){ ls.mode=m; ls.answered=false; ls.revealed=false; renderLs(); }
+function renderLs(){
+  if(ls.i>=ls.list.length) return renderLsResult();
+  const c=ls.list[ls.i];ls.answered=false;ls.revealed=false;
+  let body='';
+  if(ls.mode==='choice'){
+    const others=shuffle(state.words.filter(x=>x.id!==c.id)).slice(0,3);
+    const opts=shuffle([c,...others]);
+    body=`<div class="choices">${opts.map(x=>`<button class="choice" data-id="${x.id}" onclick="answerLsChoice('${x.id}','${c.id}')">${esc(x.ja)}</button>`).join('')}</div>`;
+  }else{
+    body=`
+      <div class="field" style="margin-bottom:10px"><input id="lsInput" placeholder="聞こえた英語を入力" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkLsDict()"></div>
+      <div id="lsHintArea" style="min-height:22px;margin-bottom:10px;font-size:13px;color:var(--sub);font-weight:700;text-align:center"></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" onclick="lsHint()">💡 意味を見る</button>
+        <button class="btn btn-primary" onclick="checkLsDict()">こたえる</button>
+      </div>`;
+  }
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="mode-head"><h2>👂 リスニング</h2><span class="quiz-score">${ls.combo>=2?`<span class="combo-tag">🔥${ls.combo} </span>`:''}⭐ ${ls.score} (${ls.i+1}/${ls.list.length})</span></div>
+    <div class="progress-line"><i style="width:${ls.i/ls.list.length*100}%"></i></div>
+    <div class="toggle-row"><div class="seg">
+      <button class="${ls.mode==='choice'?'on':''}" onclick="lsMode('choice')">きいて選ぶ</button>
+      <button class="${ls.mode==='dict'?'on':''}" onclick="lsMode('dict')">きいて書く</button>
+    </div></div>
+    <div style="height:12px"></div>
+    <div class="q-card" style="text-align:center">
+      <div class="qlabel">${ls.mode==='choice'?'音を聞いて、意味をえらぼう':'音を聞いて、英語で書こう'}</div>
+      <button class="btn btn-accent" style="max-width:220px;margin:6px auto 0" onclick="speakLs()">🔊 もう一度きく</button>
+    </div>
+    ${body}
+    <div id="lsFeedback" style="margin-top:14px"></div>`;
+  setTimeout(()=>{speakLs();const el=$('lsInput');if(el)el.focus();},350);
+}
+function lsHint(){
+  const c=ls.list[ls.i];
+  $('lsHintArea').textContent='意味: '+c.ja+'　('+c.en.replace(/ /g,'').length+'文字)';
+}
+function lsCorrect(real){
+  ls.score++;ls.combo++;ls.maxCombo=Math.max(ls.maxCombo,ls.combo);
+  if(ls.combo>state.maxCombo)state.maxCombo=ls.combo;
+  if(real){real.correct++;if(real.correct>=3)real.learned=true;}
+  addXp((ls.mode==='dict'?18:12)+(ls.combo>=5?10:ls.combo>=3?5:0));touchStreak();
+  pop(ls.combo>=3?14:8);
+}
+function lsWrong(c,real){ ls.combo=0; ls.miss.push(c); if(real)real.wrong++; }
+function answerLsChoice(picked,correctId){
+  if(ls.answered)return;ls.answered=true;
+  const c=ls.list[ls.i],real=state.words.find(x=>x.id===c.id),ok=picked===correctId;
+  document.querySelectorAll('.choice').forEach(b=>{const id=b.dataset.id;
+    if(id===correctId)b.classList.add('correct');else if(id===picked)b.classList.add('wrong');else b.classList.add('dim');b.onclick=null;});
+  if(ok)lsCorrect(real);else lsWrong(c,real);
+  save();
+  $('lsFeedback').innerHTML=`<div class="${ok?'':''}" style="text-align:center;font-weight:800;margin-bottom:10px">${ok?'⭕':'❌'} <span style="font-family:Poppins;font-size:22px;color:var(--primary)">${esc(c.en)}</span>　<span style="color:var(--sub)">${esc(c.ja)}</span></div>
+    <button class="btn btn-primary" onclick="lsNext()">次へ ›</button>`;
+}
+function checkLsDict(){
+  if(ls.answered)return;
+  const c=ls.list[ls.i],val=$('lsInput').value;
+  if(!val.trim()){toast('聞こえた英語を入力してね');return;}
+  ls.answered=true;
+  const ok=norm(val)===norm(c.en),real=state.words.find(x=>x.id===c.id);
+  const inp=$('lsInput');if(inp)inp.disabled=true;
+  if(ok)lsCorrect(real);else lsWrong(c,real);
+  save();
+  $('lsFeedback').innerHTML=ok
+    ?`<div style="background:var(--success);color:#fff;border-radius:14px;padding:14px;text-align:center;font-weight:800">⭕ せいかい！ <span style="font-family:Poppins">${esc(c.en)}</span>（${esc(c.ja)}）</div>
+      <button class="btn btn-primary" style="margin-top:12px" onclick="lsNext()">次へ ›</button>`
+    :`<div style="background:#FFF0F2;border:1.5px solid var(--danger);border-radius:14px;padding:14px;text-align:center">
+        <div style="color:var(--danger);font-weight:800;margin-bottom:4px">❌ おしい！ せいかいは…</div>
+        <div style="font-family:Poppins;font-size:24px;font-weight:700">${esc(c.en)}</div>
+        <div style="font-size:12px;color:var(--sub);font-weight:700;margin-top:4px">${esc(c.ja)}／きみの答え: ${esc(val)}</div></div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn btn-ghost" onclick="speakLs()">🔊 もう一度</button>
+        <button class="btn btn-primary" onclick="lsNext()">次へ ›</button></div>`;
+}
+function lsNext(){ ls.i++; renderLs(); }
+function renderLsResult(){
+  const total=ls.list.length,rate=Math.round(ls.score/total*100),rk=rankOf(rate);
+  const bk='ls_'+ls.mode;const isBest=ls.score>(state.best[bk]||0);
+  if(isBest){state.best[bk]=ls.score;save();}
+  unlock('first');checkAch();
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="result"><div class="emoji">👂</div>
+      <div style="font-family:Poppins;font-size:46px;font-weight:800;color:var(--accent);line-height:1">${rk}</div>
+      <div class="big">${ls.score}<span style="font-size:28px;color:var(--sub)">/${total}</span></div>
+      <h2>${rate>=80?'耳がいいね！':'くり返せば聞き取れるようになるよ'}</h2>
+      <p>${ls.mode==='dict'?'きいて書く':'きいて選ぶ'} ／ 最大 ${ls.maxCombo} コンボ${isBest?' ／ 🏅ベスト更新！':''}</p></div>
+    ${ls.miss.length?`<div class="section-label">まちがえた単語</div><div class="miss-list">${ls.miss.map(x=>`<div class="row"><b>${esc(x.en)}</b><span>${esc(x.ja)}</span></div>`).join('')}</div>`:''}
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="renderHome()">ホーム</button>
+      <button class="btn btn-primary" onclick="startLs()">もう一回</button></div>`;
 }
 
 /* 単語管理 */
