@@ -737,11 +737,6 @@ function showHint(){
   else if(sp.hint>=3){ el.textContent=en.split('').map((ch,i)=>ch===' '?'·':(i===0||i===en.length-1||i%2===0?ch:'_')).join(' '); }
 }
 function spellHint(){ if(sp.hint<3)sp.hint++; showHint(); }
-function spellHint(){
-  const c=sp.list[sp.i];
-  const shown=c.en.split('').map((ch,i)=>ch===' '?'·':(i===0?ch:'_')).join(' ');
-  $('spHint').textContent=shown+`  (${c.en.replace(/ /g,'').length}文字)`;
-}
 function checkSpell(){
   if(sp.answered)return;
   const c=sp.list[sp.i],val=$('spInput').value;
