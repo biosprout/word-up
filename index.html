@@ -208,92 +208,169 @@ const SEED={
     {id:'u6',name:'Unit 6'},
     {id:'u7',name:'Unit 7'},
     {id:'u8',name:'Unit 8'},
+    {id:'g_daily',name:'毎日の生活'},
+    {id:'g_feel',name:'気持ち・性格'},
+    {id:'g_sport',name:'スポーツ・遊び'},
+    {id:'g_job',name:'仕事・人'},
+    {id:'g_word',name:'よく使う語'},
+    {id:'g_verb2',name:'動詞（その2）'},
+    {id:'g_adj2',name:'形容詞（その2）'},
+    {id:'g_next',name:'中2への準備'},
   ],
   words:[
-    w('hello','こんにちは','g_greet'),w('hi','やあ','g_greet'),w('good morning','おはよう','g_greet'),
-    w('good afternoon','こんにちは(昼)','g_greet'),w('good night','おやすみ','g_greet'),w('goodbye','さようなら','g_greet'),
-    w('thank you','ありがとう','g_greet'),w('thanks','ありがとう','g_greet'),w('please','どうぞ・お願い','g_greet'),
-    w('sorry','ごめんなさい','g_greet'),w('yes','はい','g_greet'),w('no','いいえ','g_greet'),
-    w('excuse me','すみません','g_greet'),w('welcome','ようこそ','g_greet'),
-    w('I','わたしは','g_people'),w('you','あなた(は)','g_people'),w('he','彼は','g_people'),w('she','彼女は','g_people'),
-    w('we','わたしたちは','g_people'),w('they','彼らは','g_people'),w('it','それは','g_people'),w('name','名前','g_people'),
-    w('friend','友だち','g_people'),w('people','人々','g_people'),w('boy','男の子','g_people'),w('girl','女の子','g_people'),
-    w('man','男の人','g_people'),w('woman','女の人','g_people'),w('everyone','みんな','g_people'),w('child','子ども','g_people'),
-    w('zero','0','g_num'),w('one','1','g_num'),w('two','2','g_num'),w('three','3','g_num'),w('four','4','g_num'),
-    w('five','5','g_num'),w('six','6','g_num'),w('seven','7','g_num'),w('eight','8','g_num'),w('nine','9','g_num'),
+    w('hello','こんにちは','g_greet'),w('hi','やあ','g_greet'),w('good morning','おはよう','g_greet'),w('good afternoon','こんにちは(昼)','g_greet'),
+    w('good night','おやすみ','g_greet'),w('goodbye','さようなら','g_greet'),w('thank you','ありがとう','g_greet'),w('thanks','ありがとう','g_greet'),
+    w('please','どうぞ・お願い','g_greet'),w('sorry','ごめんなさい','g_greet'),w('yes','はい','g_greet'),w('no','いいえ','g_greet'),
+    w('excuse me','すみません','g_greet'),w('welcome','ようこそ','g_greet'),w('I','わたしは','g_people'),w('you','あなた(は)','g_people'),
+    w('he','彼は','g_people'),w('she','彼女は','g_people'),w('we','わたしたちは','g_people'),w('they','彼らは','g_people'),
+    w('it','それは','g_people'),w('name','名前','g_people'),w('friend','友だち','g_people'),w('people','人々','g_people'),
+    w('boy','男の子','g_people'),w('girl','女の子','g_people'),w('man','男の人','g_people'),w('woman','女の人','g_people'),
+    w('everyone','みんな','g_people'),w('child','子ども','g_people'),w('zero','0','g_num'),w('one','1','g_num'),
+    w('two','2','g_num'),w('three','3','g_num'),w('four','4','g_num'),w('five','5','g_num'),
+    w('six','6','g_num'),w('seven','7','g_num'),w('eight','8','g_num'),w('nine','9','g_num'),
     w('ten','10','g_num'),w('eleven','11','g_num'),w('twelve','12','g_num'),w('twenty','20','g_num'),
-    w('thirty','30','g_num'),w('fifty','50','g_num'),w('hundred','100','g_num'),
-    w('Sunday','日曜日','g_week'),w('Monday','月曜日','g_week'),w('Tuesday','火曜日','g_week'),w('Wednesday','水曜日','g_week'),
-    w('Thursday','木曜日','g_week'),w('Friday','金曜日','g_week'),w('Saturday','土曜日','g_week'),
-    w('January','1月','g_month'),w('February','2月','g_month'),w('March','3月','g_month'),w('April','4月','g_month'),
-    w('May','5月','g_month'),w('June','6月','g_month'),w('July','7月','g_month'),w('August','8月','g_month'),
-    w('September','9月','g_month'),w('October','10月','g_month'),w('November','11月','g_month'),w('December','12月','g_month'),
-    w('red','赤','g_color'),w('blue','青','g_color'),w('green','緑','g_color'),w('yellow','黄色','g_color'),
-    w('white','白','g_color'),w('black','黒','g_color'),w('pink','ピンク','g_color'),w('brown','茶色','g_color'),
-    w('orange','オレンジ','g_color'),w('purple','むらさき','g_color'),w('color','色','g_color'),
-    w('father','お父さん','g_family'),w('mother','お母さん','g_family'),w('brother','兄・弟','g_family'),
-    w('sister','姉・妹','g_family'),w('family','家族','g_family'),w('grandfather','おじいさん','g_family'),
-    w('grandmother','おばあさん','g_family'),w('parent','親','g_family'),
-    w('school','学校','g_school'),w('classroom','教室','g_school'),w('teacher','先生','g_school'),w('student','生徒','g_school'),
-    w('class','授業・クラス','g_school'),w('book','本','g_school'),w('notebook','ノート','g_school'),w('pen','ペン','g_school'),
-    w('pencil','えんぴつ','g_school'),w('desk','机','g_school'),w('chair','いす','g_school'),w('bag','かばん','g_school'),
-    w('eraser','消しゴム','g_school'),w('ruler','じょうぎ','g_school'),w('dictionary','辞書','g_school'),w('homework','宿題','g_school'),
-    w('test','テスト','g_school'),w('English','英語','g_school'),w('math','数学','g_school'),w('science','理科','g_school'),
-    w('apple','りんご','g_food'),w('banana','バナナ','g_food'),w('orange','オレンジ','g_food'),w('egg','たまご','g_food'),
-    w('milk','牛乳','g_food'),w('bread','パン','g_food'),w('rice','ごはん・米','g_food'),w('water','水','g_food'),
-    w('fish','魚','g_food'),w('meat','肉','g_food'),w('lunch','昼食','g_food'),w('breakfast','朝食','g_food'),
-    w('dinner','夕食','g_food'),w('cake','ケーキ','g_food'),w('juice','ジュース','g_food'),w('tea','お茶','g_food'),
-    w('vegetable','野菜','g_food'),w('fruit','くだもの','g_food'),
-    w('dog','犬','g_animal'),w('cat','ねこ','g_animal'),w('bird','鳥','g_animal'),w('rabbit','うさぎ','g_animal'),
-    w('horse','馬','g_animal'),w('lion','ライオン','g_animal'),w('elephant','ぞう','g_animal'),w('monkey','さる','g_animal'),
-    w('bear','くま','g_animal'),w('panda','パンダ','g_animal'),w('animal','動物','g_animal'),
-    w('big','大きい','g_adj'),w('small','小さい','g_adj'),w('good','よい','g_adj'),w('bad','悪い','g_adj'),
-    w('happy','うれしい','g_adj'),w('sad','悲しい','g_adj'),w('new','新しい','g_adj'),w('old','古い・年とった','g_adj'),
-    w('hot','暑い・熱い','g_adj'),w('cold','寒い・冷たい','g_adj'),w('long','長い','g_adj'),w('short','短い','g_adj'),
-    w('tall','背が高い','g_adj'),w('fast','速い','g_adj'),w('slow','おそい','g_adj'),w('kind','親切な','g_adj'),
-    w('cute','かわいい','g_adj'),w('fun','楽しい','g_adj'),w('easy','かんたんな','g_adj'),w('difficult','むずかしい','g_adj'),
-    w('nice','すてきな','g_adj'),w('beautiful','美しい','g_adj'),w('busy','いそがしい','g_adj'),w('tired','つかれた','g_adj'),
-    w('hungry','おなかがすいた','g_adj'),w('great','すばらしい','g_adj'),w('favorite','お気に入りの','g_adj'),
-    w('interesting','おもしろい','g_adj'),w('delicious','おいしい','g_adj'),
-    w('like','好き(です)','g_verb'),w('love','大好き(です)','g_verb'),w('play','(スポーツを)する・遊ぶ','g_verb'),
-    w('go','行く','g_verb'),w('come','来る','g_verb'),w('eat','食べる','g_verb'),w('drink','飲む','g_verb'),
-    w('run','走る','g_verb'),w('walk','歩く','g_verb'),w('study','勉強する','g_verb'),w('read','読む','g_verb'),
-    w('write','書く','g_verb'),w('see','見る・会う','g_verb'),w('look','見る','g_verb'),w('watch','(じっと)見る','g_verb'),
-    w('listen','聞く','g_verb'),w('speak','話す','g_verb'),w('want','ほしい','g_verb'),w('have','持っている','g_verb'),
-    w('make','作る','g_verb'),w('get','手に入れる','g_verb'),w('know','知っている','g_verb'),w('think','考える','g_verb'),
-    w('help','助ける','g_verb'),w('live','住む','g_verb'),w('use','使う','g_verb'),w('open','開ける','g_verb'),
-    w('sing','歌う','g_verb'),w('swim','泳ぐ','g_verb'),w('cook','料理する','g_verb'),w('enjoy','楽しむ','g_verb'),
-    w('practice','練習する','g_verb'),w('visit','訪れる','g_verb'),w('meet','会う','g_verb'),
-    w('home','家(へ)','g_place'),w('house','家','g_place'),w('room','部屋','g_place'),w('park','公園','g_place'),
-    w('station','駅','g_place'),w('library','図書館','g_place'),w('hospital','病院','g_place'),w('shop','店','g_place'),
-    w('store','店','g_place'),w('restaurant','レストラン','g_place'),w('zoo','動物園','g_place'),w('sea','海','g_place'),
-    w('mountain','山','g_place'),w('river','川','g_place'),w('town','町','g_place'),w('city','都市','g_place'),
-    w('country','国','g_place'),w('bus','バス','g_place'),w('train','電車','g_place'),w('bike','自転車','g_place'),
-    w('car','車','g_place'),
-    w('sun','太陽','g_nature'),w('moon','月','g_nature'),w('star','星','g_nature'),w('sky','空','g_nature'),
-    w('tree','木','g_nature'),w('flower','花','g_nature'),w('rain','雨','g_nature'),w('snow','雪','g_nature'),
-    w('wind','風','g_nature'),w('weather','天気','g_nature'),w('spring','春','g_nature'),w('summer','夏','g_nature'),
-    w('fall','秋','g_nature'),w('winter','冬','g_nature'),w('today','今日','g_nature'),w('tomorrow','明日','g_nature'),
-    w('yesterday','昨日','g_nature'),w('morning','朝','g_nature'),w('night','夜','g_nature'),w('time','時間','g_nature'),
-    w('day','日','g_nature'),w('year','年','g_nature'),
+    w('thirty','30','g_num'),w('fifty','50','g_num'),w('hundred','100','g_num'),w('Sunday','日曜日','g_week'),
+    w('Monday','月曜日','g_week'),w('Tuesday','火曜日','g_week'),w('Wednesday','水曜日','g_week'),w('Thursday','木曜日','g_week'),
+    w('Friday','金曜日','g_week'),w('Saturday','土曜日','g_week'),w('January','1月','g_month'),w('February','2月','g_month'),
+    w('March','3月','g_month'),w('April','4月','g_month'),w('May','5月','g_month'),w('June','6月','g_month'),
+    w('July','7月','g_month'),w('August','8月','g_month'),w('September','9月','g_month'),w('October','10月','g_month'),
+    w('November','11月','g_month'),w('December','12月','g_month'),w('red','赤','g_color'),w('blue','青','g_color'),
+    w('green','緑','g_color'),w('yellow','黄色','g_color'),w('white','白','g_color'),w('black','黒','g_color'),
+    w('pink','ピンク','g_color'),w('brown','茶色','g_color'),w('orange','オレンジ','g_color'),w('purple','むらさき','g_color'),
+    w('color','色','g_color'),w('father','お父さん','g_family'),w('mother','お母さん','g_family'),w('brother','兄・弟','g_family'),
+    w('sister','姉・妹','g_family'),w('family','家族','g_family'),w('grandfather','おじいさん','g_family'),w('grandmother','おばあさん','g_family'),
+    w('parent','親','g_family'),w('school','学校','g_school'),w('classroom','教室','g_school'),w('teacher','先生','g_school'),
+    w('student','生徒','g_school'),w('class','授業・クラス','g_school'),w('book','本','g_school'),w('notebook','ノート','g_school'),
+    w('pen','ペン','g_school'),w('pencil','えんぴつ','g_school'),w('desk','机','g_school'),w('chair','いす','g_school'),
+    w('bag','かばん','g_school'),w('eraser','消しゴム','g_school'),w('ruler','じょうぎ','g_school'),w('dictionary','辞書','g_school'),
+    w('homework','宿題','g_school'),w('test','テスト','g_school'),w('English','英語','g_school'),w('math','数学','g_school'),
+    w('science','理科','g_school'),w('apple','りんご','g_food'),w('banana','バナナ','g_food'),w('orange','オレンジ','g_food'),
+    w('egg','たまご','g_food'),w('milk','牛乳','g_food'),w('bread','パン','g_food'),w('rice','ごはん・米','g_food'),
+    w('water','水','g_food'),w('fish','魚','g_food'),w('meat','肉','g_food'),w('lunch','昼食','g_food'),
+    w('breakfast','朝食','g_food'),w('dinner','夕食','g_food'),w('cake','ケーキ','g_food'),w('juice','ジュース','g_food'),
+    w('tea','お茶','g_food'),w('vegetable','野菜','g_food'),w('fruit','くだもの','g_food'),w('dog','犬','g_animal'),
+    w('cat','ねこ','g_animal'),w('bird','鳥','g_animal'),w('rabbit','うさぎ','g_animal'),w('horse','馬','g_animal'),
+    w('lion','ライオン','g_animal'),w('elephant','ぞう','g_animal'),w('monkey','さる','g_animal'),w('bear','くま','g_animal'),
+    w('panda','パンダ','g_animal'),w('animal','動物','g_animal'),w('big','大きい','g_adj'),w('small','小さい','g_adj'),
+    w('good','よい','g_adj'),w('bad','悪い','g_adj'),w('happy','うれしい','g_adj'),w('sad','悲しい','g_adj'),
+    w('new','新しい','g_adj'),w('old','古い・年とった','g_adj'),w('hot','暑い・熱い','g_adj'),w('cold','寒い・冷たい','g_adj'),
+    w('long','長い','g_adj'),w('short','短い','g_adj'),w('tall','背が高い','g_adj'),w('fast','速い','g_adj'),
+    w('slow','おそい','g_adj'),w('kind','親切な','g_adj'),w('cute','かわいい','g_adj'),w('fun','楽しい','g_adj'),
+    w('easy','かんたんな','g_adj'),w('difficult','むずかしい','g_adj'),w('nice','すてきな','g_adj'),w('beautiful','美しい','g_adj'),
+    w('busy','いそがしい','g_adj'),w('tired','つかれた','g_adj'),w('hungry','おなかがすいた','g_adj'),w('great','すばらしい','g_adj'),
+    w('favorite','お気に入りの','g_adj'),w('interesting','おもしろい','g_adj'),w('delicious','おいしい','g_adj'),w('like','好き(です)','g_verb'),
+    w('love','大好き(です)','g_verb'),w('play','(スポーツを)する・遊ぶ','g_verb'),w('go','行く','g_verb'),w('come','来る','g_verb'),
+    w('eat','食べる','g_verb'),w('drink','飲む','g_verb'),w('run','走る','g_verb'),w('walk','歩く','g_verb'),
+    w('study','勉強する','g_verb'),w('read','読む','g_verb'),w('write','書く','g_verb'),w('see','見る・会う','g_verb'),
+    w('look','見る','g_verb'),w('watch','(じっと)見る','g_verb'),w('listen','聞く','g_verb'),w('speak','話す','g_verb'),
+    w('want','ほしい','g_verb'),w('have','持っている','g_verb'),w('make','作る','g_verb'),w('get','手に入れる','g_verb'),
+    w('know','知っている','g_verb'),w('think','考える','g_verb'),w('help','助ける','g_verb'),w('live','住む','g_verb'),
+    w('use','使う','g_verb'),w('open','開ける','g_verb'),w('sing','歌う','g_verb'),w('swim','泳ぐ','g_verb'),
+    w('cook','料理する','g_verb'),w('enjoy','楽しむ','g_verb'),w('practice','練習する','g_verb'),w('visit','訪れる','g_verb'),
+    w('meet','会う','g_verb'),w('home','家(へ)','g_place'),w('house','家','g_place'),w('room','部屋','g_place'),
+    w('park','公園','g_place'),w('station','駅','g_place'),w('library','図書館','g_place'),w('hospital','病院','g_place'),
+    w('shop','店','g_place'),w('store','店','g_place'),w('restaurant','レストラン','g_place'),w('zoo','動物園','g_place'),
+    w('sea','海','g_place'),w('mountain','山','g_place'),w('river','川','g_place'),w('town','町','g_place'),
+    w('city','都市','g_place'),w('country','国','g_place'),w('bus','バス','g_place'),w('train','電車','g_place'),
+    w('bike','自転車','g_place'),w('car','車','g_place'),w('sun','太陽','g_nature'),w('moon','月','g_nature'),
+    w('star','星','g_nature'),w('sky','空','g_nature'),w('tree','木','g_nature'),w('flower','花','g_nature'),
+    w('rain','雨','g_nature'),w('snow','雪','g_nature'),w('wind','風','g_nature'),w('weather','天気','g_nature'),
+    w('spring','春','g_nature'),w('summer','夏','g_nature'),w('fall','秋','g_nature'),w('winter','冬','g_nature'),
+    w('today','今日','g_nature'),w('tomorrow','明日','g_nature'),w('yesterday','昨日','g_nature'),w('morning','朝','g_nature'),
+    w('night','夜','g_nature'),w('time','時間','g_nature'),w('day','日','g_nature'),w('year','年','g_nature'),
     w('head','頭','g_body'),w('hair','かみの毛','g_body'),w('eye','目','g_body'),w('ear','耳','g_body'),
     w('nose','鼻','g_body'),w('mouth','口','g_body'),w('hand','手','g_body'),w('foot','足','g_body'),
-    w('face','顔','g_body'),w('leg','足(脚)','g_body'),
-    w('phone','電話','g_things'),w('camera','カメラ','g_things'),w('clock','時計','g_things'),w('watch','うで時計','g_things'),
-    w('key','かぎ','g_things'),w('money','お金','g_things'),w('ticket','チケット','g_things'),w('present','プレゼント','g_things'),
-    w('umbrella','かさ','g_things'),w('cap','ぼうし','g_things'),w('shirt','シャツ','g_things'),w('shoes','くつ','g_things'),
-    w('ball','ボール','g_things'),w('box','箱','g_things'),w('door','ドア','g_things'),w('window','まど','g_things'),
-    w('table','テーブル','g_things'),w('bed','ベッド','g_things'),w('picture','絵・写真','g_things'),w('letter','手紙','g_things'),
-    w('music','音楽','g_things'),w('movie','映画','g_things'),w('game','ゲーム','g_things'),
-    w('what','何','g_q'),w('who','だれ','g_q'),w('where','どこ','g_q'),w('when','いつ','g_q'),
-    w('how','どうやって・どのくらい','g_q'),w('why','なぜ','g_q'),w('which','どちら','g_q'),w('whose','だれの','g_q'),
+    w('face','顔','g_body'),w('leg','足(脚)','g_body'),w('phone','電話','g_things'),w('camera','カメラ','g_things'),
+    w('clock','時計','g_things'),w('watch','うで時計','g_things'),w('key','かぎ','g_things'),w('money','お金','g_things'),
+    w('ticket','チケット','g_things'),w('present','プレゼント','g_things'),w('umbrella','かさ','g_things'),w('cap','ぼうし','g_things'),
+    w('shirt','シャツ','g_things'),w('shoes','くつ','g_things'),w('ball','ボール','g_things'),w('box','箱','g_things'),
+    w('door','ドア','g_things'),w('window','まど','g_things'),w('table','テーブル','g_things'),w('bed','ベッド','g_things'),
+    w('picture','絵・写真','g_things'),w('letter','手紙','g_things'),w('music','音楽','g_things'),w('movie','映画','g_things'),
+    w('game','ゲーム','g_things'),w('what','何','g_q'),w('who','だれ','g_q'),w('where','どこ','g_q'),
+    w('when','いつ','g_q'),w('how','どうやって・どのくらい','g_q'),w('why','なぜ','g_q'),w('which','どちら','g_q'),
+    w('whose','だれの','g_q'),w('wake','目を覚ます','g_daily'),w('brush','みがく','g_daily'),w('wash','洗う','g_daily'),
+    w('clean','そうじする','g_daily'),w('shower','シャワー','g_daily'),w('sleep','眠る','g_daily'),w('dream','夢','g_daily'),
+    w('week','週','g_daily'),w('month','月','g_daily'),w('weekend','週末','g_daily'),w('every day','毎日','g_daily'),
+    w('usually','たいてい','g_daily'),w('always','いつも','g_daily'),w('sometimes','ときどき','g_daily'),w('often','よく、しばしば','g_daily'),
+    w('never','決して〜ない','g_daily'),w('early','早く','g_daily'),w('late','遅い','g_daily'),w('ready','準備ができた','g_daily'),
+    w('together','いっしょに','g_daily'),w('again','もう一度','g_daily'),w('glad','うれしい','g_feel'),w('angry','怒った','g_feel'),
+    w('afraid','こわがって','g_feel'),w('excited','わくわくした','g_feel'),w('surprised','驚いた','g_feel'),w('shy','はずかしがりの','g_feel'),
+    w('friendly','親しみやすい','g_feel'),w('brave','勇敢な','g_feel'),w('gentle','やさしい','g_feel'),w('honest','正直な','g_feel'),
+    w('quiet','静かな','g_feel'),w('funny','おもしろい','g_feel'),w('smart','かしこい','g_feel'),w('lucky','幸運な','g_feel'),
+    w('proud','誇りに思う','g_feel'),w('worry','心配する','g_feel'),w('smile','ほほえむ','g_feel'),w('laugh','笑う','g_feel'),
+    w('cry','泣く','g_feel'),w('feel','感じる','g_feel'),w('soccer','サッカー','g_sport'),w('baseball','野球','g_sport'),
+    w('tennis','テニス','g_sport'),w('basketball','バスケットボール','g_sport'),w('volleyball','バレーボール','g_sport'),w('swimming','水泳','g_sport'),
+    w('running','ランニング','g_sport'),w('team','チーム','g_sport'),w('player','選手','g_sport'),w('coach','コーチ','g_sport'),
+    w('win','勝つ','g_sport'),w('lose','負ける','g_sport'),w('match','試合','g_sport'),w('club','部活動','g_sport'),
+    w('festival','祭り','g_sport'),w('concert','コンサート','g_sport'),w('hobby','趣味','g_sport'),w('dance','おどる','g_sport'),
+    w('draw','描く','g_sport'),w('doctor','医者','g_job'),w('nurse','看護師','g_job'),w('police officer','警察官','g_job'),
+    w('farmer','農家','g_job'),w('singer','歌手','g_job'),w('artist','芸術家','g_job'),w('writer','作家','g_job'),
+    w('scientist','科学者','g_job'),w('engineer','技術者','g_job'),w('driver','運転手','g_job'),w('pilot','パイロット','g_job'),
+    w('musician','音楽家','g_job'),w('dentist','歯医者','g_job'),w('job','仕事','g_job'),w('work','働く','g_job'),
+    w('office','事務所','g_job'),w('company','会社','g_job'),w('about','〜について','g_word'),w('after','〜のあとに','g_word'),
+    w('before','〜の前に','g_word'),w('because','なぜなら','g_word'),w('but','しかし','g_word'),w('so','だから','g_word'),
+    w('if','もし〜なら','g_word'),w('also','〜もまた','g_word'),w('too','〜もまた','g_word'),w('only','〜だけ','g_word'),
+    w('very','とても','g_word'),w('really','本当に','g_word'),w('maybe','たぶん','g_word'),w('here','ここに','g_word'),
+    w('there','そこに','g_word'),w('now','今','g_word'),w('then','そのとき','g_word'),w('all','すべての','g_word'),
+    w('some','いくつかの','g_word'),w('many','たくさんの','g_word'),w('much','たくさんの','g_word'),w('other','ほかの','g_word'),
+    w('another','もう一つの','g_word'),w('same','同じ','g_word'),w('different','ちがう','g_word'),w('between','〜の間に','g_word'),
+    w('under','〜の下に','g_word'),w('near','〜の近くに','g_word'),w('around','〜のまわりに','g_word'),w('answer','答える','g_verb2'),
+    w('ask','たずねる','g_verb2'),w('begin','始める','g_verb2'),w('bring','持ってくる','g_verb2'),w('build','建てる','g_verb2'),
+    w('buy','買う','g_verb2'),w('call','呼ぶ、電話する','g_verb2'),w('carry','運ぶ','g_verb2'),w('catch','つかまえる','g_verb2'),
+    w('change','変える','g_verb2'),w('check','確かめる','g_verb2'),w('choose','選ぶ','g_verb2'),w('close','閉める','g_verb2'),
+    w('find','見つける','g_verb2'),w('finish','終える','g_verb2'),w('give','あたえる','g_verb2'),w('grow','育つ','g_verb2'),
+    w('happen','起こる','g_verb2'),w('hear','聞こえる','g_verb2'),w('hold','持つ','g_verb2'),w('hope','望む','g_verb2'),
+    w('join','参加する','g_verb2'),w('jump','とぶ','g_verb2'),w('keep','保つ','g_verb2'),w('learn','学ぶ','g_verb2'),
+    w('leave','出発する','g_verb2'),w('move','動く','g_verb2'),w('need','必要とする','g_verb2'),w('put','置く','g_verb2'),
+    w('remember','思い出す','g_verb2'),w('send','送る','g_verb2'),w('show','見せる','g_verb2'),w('sit','すわる','g_verb2'),
+    w('stand','立つ','g_verb2'),w('start','始める','g_verb2'),w('stay','とどまる','g_verb2'),w('stop','止まる','g_verb2'),
+    w('take','取る','g_verb2'),w('talk','話す','g_verb2'),w('teach','教える','g_verb2'),w('tell','伝える','g_verb2'),
+    w('try','やってみる','g_verb2'),w('turn','回る','g_verb2'),w('understand','理解する','g_verb2'),w('wait','待つ','g_verb2'),
+    w('careful','注意深い','g_adj2'),w('cheap','安い','g_adj2'),w('clear','はっきりした','g_adj2'),w('dark','暗い','g_adj2'),
+    w('dirty','きたない','g_adj2'),w('dry','かわいた','g_adj2'),w('empty','からの','g_adj2'),w('famous','有名な','g_adj2'),
+    w('free','自由な','g_adj2'),w('full','いっぱいの','g_adj2'),w('heavy','重い','g_adj2'),w('high','高い','g_adj2'),
+    w('light','軽い、明るい','g_adj2'),w('low','低い','g_adj2'),w('narrow','せまい','g_adj2'),w('poor','貧しい','g_adj2'),
+    w('rich','裕福な','g_adj2'),w('safe','安全な','g_adj2'),w('sleepy','眠い','g_adj2'),w('soft','やわらかい','g_adj2'),
+    w('strong','強い','g_adj2'),w('sweet','あまい','g_adj2'),w('thirsty','のどがかわいた','g_adj2'),w('useful','役に立つ','g_adj2'),
+    w('warm','暖かい','g_adj2'),w('weak','弱い','g_adj2'),w('wet','ぬれた','g_adj2'),w('young','若い','g_adj2'),
+    w('across','〜を横切って','g_next'),w('activity','活動','g_next'),w('advice','助言','g_next'),w('among','〜の間で','g_next'),
+    w('anything','何でも','g_next'),w('area','地域','g_next'),w('borrow','借りる','g_next'),w('bottom','底','g_next'),
+    w('century','世紀','g_next'),w('certain','確かな','g_next'),w('chance','機会','g_next'),w('choice','選択','g_next'),
+    w('condition','状態','g_next'),w('control','管理する','g_next'),w('couple','2つ、夫婦','g_next'),w('danger','危険','g_next'),
+    w('decide','決める','g_next'),w('describe','描写する','g_next'),w('discover','発見する','g_next'),w('effort','努力','g_next'),
+    w('either','どちらか','g_next'),w('enough','十分な','g_next'),w('especially','特に','g_next'),w('example','例','g_next'),
+    w('experience','経験','g_next'),w('explain','説明する','g_next'),w('follow','ついていく','g_next'),w('foreign','外国の','g_next'),
+    w('forever','永遠に','g_next'),w('however','しかしながら','g_next'),w('imagine','想像する','g_next'),w('improve','改善する','g_next'),
+    w('introduce','紹介する','g_next'),w('invent','発明する','g_next'),w('invite','招待する','g_next'),w('level','水準','g_next'),
+    w('local','地元の','g_next'),w('main','主な','g_next'),w('material','材料','g_next'),w('nature','自然','g_next'),
+    w('necessary','必要な','g_next'),w('opinion','意見','g_next'),w('perfect','完璧な','g_next'),w('perhaps','たぶん','g_next'),
+    w('plan','計画','g_next'),w('possible','可能な','g_next'),w('prepare','準備する','g_next'),w('probably','おそらく','g_next'),
+    w('produce','生産する','g_next'),w('protect','守る','g_next'),w('reason','理由','g_next'),w('receive','受け取る','g_next'),
+    w('recycle','再生利用する','g_next'),w('report','報告する','g_next'),w('result','結果','g_next'),w('return','もどる','g_next'),
+    w('scene','場面','g_next'),w('situation','状況','g_next'),w('solve','解決する','g_next'),w('spread','広がる','g_next'),
+    w('subject','教科','g_next'),w('support','支える','g_next'),w('surface','表面','g_next'),w('though','〜だけれども','g_next'),
+    w('through','〜を通って','g_next'),w('until','〜まで','g_next'),w('village','村','g_next'),w('waste','むだにする','g_next'),
+    w('wonder','不思議に思う','g_next'),
   ]
 };
 
+function merge(st){
+  // SEED に増えたグループ・単語を、既存の進捗を保ったまま取り込む
+  if(!st.groups)st.groups=[];
+  if(!st.words)st.words=[];
+  let added=0;
+  const gids=new Set(st.groups.map(g=>g.id));
+  SEED.groups.forEach(g=>{ if(!gids.has(g.id)){ st.groups.push({id:g.id,name:g.name}); gids.add(g.id); } });
+  const key=x=>(x.en||'').toLowerCase()+'|'+(x.groupId||'');
+  const have=new Set(st.words.map(key));
+  SEED.words.forEach(x=>{ if(!have.has(key(x))){ st.words.push(JSON.parse(JSON.stringify(x))); have.add(key(x)); added++; } });
+  if(added){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(st)); }catch(e){} }
+  return st;
+}
 function load(){
   try{
     const raw=localStorage.getItem(STORE_KEY);
-    if(raw) return JSON.parse(raw);
+    if(raw) return merge(JSON.parse(raw));
     localStorage.setItem(STORE_KEY,JSON.stringify(SEED));
     return JSON.parse(JSON.stringify(SEED));
   }catch(e){ if(!mem) mem=JSON.parse(JSON.stringify(SEED)); return mem; }
@@ -301,6 +378,7 @@ function load(){
 function save(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }catch(e){ mem=state; } }
 let state=load();
 let currentGroup='all';
+let quizCount=10;
 
 const $=id=>document.getElementById(id);
 const screen=$('screen');
@@ -347,6 +425,11 @@ function renderHome(){
     <div class="section-label">📚 グループをえらぶ</div>
     <div class="grp-scroll">${chips}</div>
     <div class="section-label">🎯 トレーニング</div>
+    <div class="toggle-row" style="justify-content:flex-start;margin-bottom:12px"><span style="font-size:11px;color:var(--sub);font-weight:700;margin-right:8px">1回の問題数</span><div class="seg">
+      <button class="${quizCount===10?'on':''}" onclick="setCount(10)">10問</button>
+      <button class="${quizCount===20?'on':''}" onclick="setCount(20)">20問</button>
+      <button class="${quizCount==='all'?'on':''}" onclick="setCount('all')">ぜんぶ</button>
+    </div></div>
     <div class="modes">
       <div class="mode flash" onclick="startFlash()"><div class="ic">🃏</div><h3>フラッシュカード</h3><p>カードをめくって覚える</p></div>
       <div class="mode quiz" onclick="startQuiz()"><div class="ic">✏️</div><h3>4択クイズ</h3><p>意味を当ててチェック</p></div>
@@ -359,6 +442,7 @@ function renderHome(){
     </div>`;
 }
 function selectGroup(g){ currentGroup=g; renderHome(); }
+function setCount(n){ quizCount=n; renderHome(); }
 
 /* フラッシュカード */
 let fc={list:[],i:0,flipped:false,dir:'en'};
@@ -406,7 +490,8 @@ function fcLearn(v){
 
 /* クイズ */
 let qz={list:[],i:0,score:0,miss:[],dir:'en',answered:false};
-function startQuiz(){ const list=wordsOf(currentGroup); if(list.length<4){toast('クイズは4語以上で遊べるよ');return;} qz={list:shuffle(list).slice(0,Math.min(10,list.length)),i:0,score:0,miss:[],dir:'en',answered:false}; renderQuiz(); }
+function startQuiz(){ const list=wordsOf(currentGroup); if(list.length<4){toast('クイズは4語以上で遊べるよ');return;} const qn=quizCount==='all'?list.length:Math.min(quizCount,list.length);
+  qz={list:shuffle(list).slice(0,qn),i:0,score:0,miss:[],dir:'en',answered:false}; renderQuiz(); }
 function renderQuiz(){
   if(qz.i>=qz.list.length) return renderQuizResult();
   const c=qz.list[qz.i],askEn=qz.dir==='en';
@@ -433,7 +518,7 @@ function answerQuiz(picked,correctId){
     else if(id===picked)b.classList.add('wrong'); else b.classList.add('dim');
     b.onclick=null;
   });
-  if(ok){qz.score++;if(real)real.correct++;pop();} else {qz.miss.push(c);if(real)real.wrong++;}
+  if(ok){qz.score++;if(real){real.correct++;if(real.correct>=3)real.learned=true;}pop();} else {qz.miss.push(c);if(real)real.wrong++;}
   save();
   setTimeout(()=>{qz.i++;qz.answered=false;renderQuiz();},ok?700:1300);
 }
@@ -459,15 +544,17 @@ function renderQuizResult(){
 
 /* 書いて覚える */
 let sp={list:[],i:0,score:0,miss:[],answered:false};
-function startSpell(){ const list=wordsOf(currentGroup); if(!list.length){toast('このグループに単語がないよ');return;} sp={list:shuffle(list).slice(0,Math.min(10,list.length)),i:0,score:0,miss:[],answered:false}; renderSpell(); }
+function startSpell(){ const list=wordsOf(currentGroup); if(!list.length){toast('このグループに単語がないよ');return;}
+  const n=quizCount==='all'?list.length:Math.min(quizCount,list.length);
+  sp={list:shuffle(list).slice(0,n),i:0,score:0,miss:[],answered:false,hint:0,retry:false}; renderSpell(); }
 function renderSpell(){
   if(sp.i>=sp.list.length) return renderSpellResult();
   const c=sp.list[sp.i];
   screen.innerHTML=`
     <button class="back" onclick="renderHome()">‹ もどる</button>
-    <div class="mode-head"><h2>✍️ 書いて覚える</h2><span class="quiz-score">⭐ ${sp.score}</span></div>
+    <div class="mode-head"><h2>✍️ 書いて覚える</h2><span class="quiz-score">⭐ ${sp.score} / ${sp.i}${sp.list.length?' ('+(sp.i+1)+'/'+sp.list.length+')':''}</span></div>
     <div class="progress-line"><i style="width:${sp.i/sp.list.length*100}%"></i></div>
-    <div class="q-card"><div class="qlabel">この意味を英語で書こう</div>
+    <div class="q-card"><div class="qlabel">${sp.retry?'もう一度：正しいつづりで書こう':'この意味を英語で書こう'}</div>
       <div class="qword ja">${esc(c.ja)}</div>
       <div id="spHint" style="font-family:Poppins;letter-spacing:5px;color:var(--sub);font-size:18px;margin-top:12px;min-height:24px"></div>
     </div>
@@ -477,8 +564,17 @@ function renderSpell(){
       <button class="btn btn-primary" onclick="checkSpell()">こたえる</button>
     </div>
     <div id="spFeedback" style="margin-top:16px"></div>`;
+  if(sp.hint>0) showHint();
   setTimeout(()=>{const el=$('spInput');if(el)el.focus();},60);
 }
+function showHint(){
+  const c=sp.list[sp.i],el=$('spHint'); if(!el)return;
+  const en=c.en, letters=en.replace(/ /g,'').length;
+  if(sp.hint===1){ el.textContent=en.split('').map(ch=>ch===' '?'·':'_').join(' ')+`  (${letters}文字)`; }
+  else if(sp.hint===2){ el.textContent=en.split('').map((ch,i)=>ch===' '?'·':(i===0?ch:'_')).join(' ')+`  (${letters}文字)`; }
+  else if(sp.hint>=3){ el.textContent=en.split('').map((ch,i)=>ch===' '?'·':(i===0||i===en.length-1||i%2===0?ch:'_')).join(' '); }
+}
+function spellHint(){ if(sp.hint<3)sp.hint++; showHint(); }
 function spellHint(){
   const c=sp.list[sp.i];
   const shown=c.en.split('').map((ch,i)=>ch===' '?'·':(i===0?ch:'_')).join(' ');
@@ -490,18 +586,26 @@ function checkSpell(){
   if(!val.trim()){toast('英語を入力してね');return;}
   sp.answered=true;
   const ok=norm(val)===norm(c.en),real=state.words.find(x=>x.id===c.id),fb=$('spFeedback');
-  if(ok){ sp.score++; if(real)real.correct++; pop();
-    fb.innerHTML=`<div style="background:var(--success);color:#fff;border-radius:14px;padding:16px;text-align:center;font-weight:800;font-size:16px">⭕ せいかい！　<span style="font-family:Poppins">${esc(c.en)}</span></div>`;
-  }else{ sp.miss.push(c); if(real)real.wrong++;
+  const inp=$('spInput'); if(inp) inp.disabled=true;
+  if(ok){
+    if(!sp.retry){ sp.score++; if(real){real.correct++; if(real.correct>=3)real.learned=true;} }
+    pop();
+    fb.innerHTML=`<div style="background:var(--success);color:#fff;border-radius:14px;padding:16px;text-align:center;font-weight:800;font-size:16px">⭕ せいかい！　<span style="font-family:Poppins">${esc(c.en)}</span></div>
+      <button class="btn btn-primary" style="margin-top:12px" onclick="nextSpell()">次へ ›</button>`;
+  }else{
+    if(!sp.retry){ sp.miss.push(c); if(real)real.wrong++; }
     fb.innerHTML=`<div style="background:#FFF0F2;border:1.5px solid var(--danger);border-radius:14px;padding:16px;text-align:center">
       <div style="color:var(--danger);font-weight:800;margin-bottom:6px">❌ おしい！ せいかいは…</div>
-      <div style="font-family:Poppins;font-size:26px;font-weight:700;color:var(--text)">${esc(c.en)}</div></div>`;
+      <div style="font-family:Poppins;font-size:26px;font-weight:700;color:var(--text)">${esc(c.en)}</div>
+      <div style="font-size:12px;color:var(--sub);font-weight:600;margin-top:8px">きみの答え: ${esc(val)}</div></div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn btn-accent" onclick="retrySpell()">✍️ もう一度書く</button>
+        <button class="btn btn-ghost" onclick="nextSpell()">次へ ›</button></div>`;
   }
   save();
-  const inp=$('spInput'); if(inp) inp.disabled=true;
-  fb.innerHTML+=`<button class="btn btn-primary" style="margin-top:12px" onclick="nextSpell()">次へ ›</button>`;
 }
-function nextSpell(){ sp.i++; sp.answered=false; renderSpell(); }
+function retrySpell(){ sp.answered=false; sp.retry=true; sp.hint=2; renderSpell(); }
+function nextSpell(){ sp.i++; sp.answered=false; sp.hint=0; sp.retry=false; renderSpell(); }
 function renderSpellResult(){
   const total=sp.list.length,rate=Math.round(sp.score/total*100);
   let emoji='✍️',msg='よく書けました！';
