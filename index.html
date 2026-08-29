@@ -65,6 +65,12 @@
   .mode.quiz .ic{background:#FFE9DB}
   .mode.game .ic{background:#DEF7F0}
   .mode.spell .ic{background:#E3F0FF}
+  .ach-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .achb{background:var(--panel);border:1.5px solid var(--border);border-radius:12px;padding:9px 8px;opacity:.55}
+  .achb.got{opacity:1;border-color:var(--accent);background:#FFF8EE}
+  .achb .an{font-size:10px;font-weight:800;line-height:1.3}
+  .achb .ad{font-size:8px;color:var(--sub);font-weight:600;margin-top:3px;line-height:1.3}
+  .combo-tag{font-family:'Poppins';font-weight:800;font-size:13px;color:var(--accent)}
   .manage-btn{display:flex;align-items:center;gap:12px;background:var(--panel);border:1.5px solid var(--border);
     border-radius:18px;padding:16px 18px;margin-top:12px;cursor:pointer;box-shadow:var(--shadow-sm);transition:.15s}
   .manage-btn:active{transform:scale(.98)}
@@ -379,6 +385,65 @@ function save(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }ca
 let state=load();
 let currentGroup='all';
 let quizCount=10;
+if(state.xp==null)state.xp=0;
+if(state.maxCombo==null)state.maxCombo=0;
+if(!state.best)state.best={};
+if(!state.ach)state.ach=[];
+if(!state.streak)state.streak={day:'',count:0};
+
+const ACH=[
+ {id:'first',name:'はじめの一歩',desc:'クイズを1回クリア'},
+ {id:'combo5',name:'コンボスター',desc:'5コンボ達成'},
+ {id:'combo10',name:'コンボマスター',desc:'10コンボ達成'},
+ {id:'learn50',name:'50語ハンター',desc:'おぼえた50語'},
+ {id:'learn150',name:'150語コレクター',desc:'おぼえた150語'},
+ {id:'learn300',name:'300語レジェンド',desc:'おぼえた300語'},
+ {id:'streak3',name:'3日れんぞく',desc:'3日連続で学習'},
+ {id:'streak7',name:'週間パーフェクト',desc:'7日連続で学習'},
+ {id:'lv5',name:'Lv.5 とうたつ',desc:'レベル5になる'},
+ {id:'lv10',name:'Lv.10 とうたつ',desc:'レベル10になる'},
+ {id:'ta15',name:'スピードキング',desc:'タイムアタック15問'},
+];
+function lvlInfo(xp){let l=1,need=100,acc=0;while(xp>=acc+need){acc+=need;l++;need=100*l;}return{level:l,cur:xp-acc,need};}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function touchStreak(){
+  const t=todayStr();if(state.streak.day===t)return;
+  const y=new Date(Date.now()-864e5);
+  const ys=y.getFullYear()+'-'+String(y.getMonth()+1).padStart(2,'0')+'-'+String(y.getDate()).padStart(2,'0');
+  state.streak.count=(state.streak.day===ys)?state.streak.count+1:1;
+  state.streak.day=t;save();
+  if(state.streak.count>=2)toast('🔥 '+state.streak.count+'日れんぞく！');
+  checkAch();
+}
+function addXp(n){
+  const before=lvlInfo(state.xp).level;
+  state.xp+=n;
+  const after=lvlInfo(state.xp).level;
+  save();
+  if(after>before){pop(20);setTimeout(()=>toast('🎉 レベル'+after+'になった！'),350);}
+  checkAch();
+}
+function unlock(id){
+  if(state.ach.includes(id))return;
+  state.ach.push(id);save();
+  const a=ACH.find(x=>x.id===id);
+  setTimeout(()=>toast('🏅 実績かいじょ: '+(a?a.name:id)),700);
+}
+function checkAch(){
+  const learned=state.words.filter(x=>x.learned).length;
+  const lv=lvlInfo(state.xp).level;
+  if(state.maxCombo>=5)unlock('combo5');
+  if(state.maxCombo>=10)unlock('combo10');
+  if(learned>=50)unlock('learn50');
+  if(learned>=150)unlock('learn150');
+  if(learned>=300)unlock('learn300');
+  if(state.streak.count>=3)unlock('streak3');
+  if(state.streak.count>=7)unlock('streak7');
+  if(lv>=5)unlock('lv5');
+  if(lv>=10)unlock('lv10');
+  if((state.best.ta||0)>=15)unlock('ta15');
+}
+function rankOf(rate){return rate>=100?'S':rate>=80?'A':rate>=60?'B':rate>=40?'C':'D';}
 
 const $=id=>document.getElementById(id);
 const screen=$('screen');
@@ -424,6 +489,16 @@ function renderHome(){
     </div>
     <div class="section-label">📚 グループをえらぶ</div>
     <div class="grp-scroll">${chips}</div>
+    <div class="ring-card" style="padding:16px 20px;gap:14px">
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+          <span style="font-family:Poppins;font-weight:800;font-size:18px;color:var(--primary)">Lv.${lvlInfo(state.xp).level}</span>
+          <span style="font-size:11px;color:var(--sub);font-weight:700">${state.streak.count>=2?'🔥 '+state.streak.count+'日れんぞく':'今日もがんばろう'}</span>
+        </div>
+        <div class="progress-line" style="margin:0 0 4px"><i style="width:${lvlInfo(state.xp).cur/lvlInfo(state.xp).need*100}%"></i></div>
+        <div style="font-size:10px;color:var(--sub);font-weight:700;text-align:right">あと ${lvlInfo(state.xp).need-lvlInfo(state.xp).cur} XP でレベルアップ</div>
+      </div>
+    </div>
     <div class="section-label">🎯 トレーニング</div>
     <div class="toggle-row" style="justify-content:flex-start;margin-bottom:12px"><span style="font-size:11px;color:var(--sub);font-weight:700;margin-right:8px">1回の問題数</span><div class="seg">
       <button class="${quizCount===10?'on':''}" onclick="setCount(10)">10問</button>
@@ -435,6 +510,12 @@ function renderHome(){
       <div class="mode quiz" onclick="startQuiz()"><div class="ic">✏️</div><h3>4択クイズ</h3><p>意味を当ててチェック</p></div>
       <div class="mode game" onclick="startGame()"><div class="ic">⚡</div><h3>マッチング</h3><p>ペアをそろえてタイムを競う</p></div>
       <div class="mode spell" onclick="startSpell()"><div class="ic">✍️</div><h3>書いて覚える</h3><p>意味を見て英語を入力</p></div>
+    </div>
+    <button class="btn btn-accent" style="margin-top:12px" onclick="startTA()">⚡ タイムアタック（60秒で何問？）${state.best.ta?` ベスト:${state.best.ta}問`:''}</button>
+    <div class="section-label" style="margin-top:16px">🏅 実績（${state.ach.length}/${ACH.length}）</div>
+    <div class="ach-grid">
+      ${ACH.map(a=>{const got=state.ach.includes(a.id);
+        return `<div class="achb ${got?'got':''}"><div class="an">${got?'🏅':'🔒'} ${a.name}</div><div class="ad">${a.desc}</div></div>`;}).join('')}
     </div>
     <div class="manage-btn" onclick="renderManage()">
       <div class="ic">➕</div>
@@ -483,15 +564,16 @@ function fcMove(n){ fc.i=(fc.i+n+fc.list.length)%fc.list.length; fc.flipped=fals
 function fcLearn(v){
   const c=fc.list[fc.i],real=state.words.find(x=>x.id===c.id);
   if(real){real.learned=v;c.learned=v;} save();
+  if(v){addXp(3);touchStreak();}
   if(fc.i<fc.list.length-1){fc.i++;fc.flipped=false;}
   renderFlash();
-  toast(v?'ナイス！おぼえたね 🎉':'OK、あとでまた出すね');
+  toast(v?'ナイス！おぼえたね +3XP':'OK、あとでまた出すね');
 }
 
 /* クイズ */
 let qz={list:[],i:0,score:0,miss:[],dir:'en',answered:false};
 function startQuiz(){ const list=wordsOf(currentGroup); if(list.length<4){toast('クイズは4語以上で遊べるよ');return;} const qn=quizCount==='all'?list.length:Math.min(quizCount,list.length);
-  qz={list:shuffle(list).slice(0,qn),i:0,score:0,miss:[],dir:'en',answered:false}; renderQuiz(); }
+  qz={list:shuffle(list).slice(0,qn),i:0,score:0,miss:[],dir:'en',answered:false,combo:0,maxCombo:0}; renderQuiz(); }
 function renderQuiz(){
   if(qz.i>=qz.list.length) return renderQuizResult();
   const c=qz.list[qz.i],askEn=qz.dir==='en';
@@ -501,7 +583,7 @@ function renderQuiz(){
   const ct=x=>askEn?x.ja:x.en;
   screen.innerHTML=`
     <button class="back" onclick="renderHome()">‹ もどる</button>
-    <div class="mode-head"><h2>✏️ クイズ</h2><span class="quiz-score">⭐ ${qz.score}</span></div>
+    <div class="mode-head"><h2>✏️ クイズ</h2><span class="quiz-score">${qz.combo>=2?`<span class="combo-tag">🔥${qz.combo} </span>`:''}⭐ ${qz.score}</span></div>
     <div class="progress-line"><i style="width:${qz.i/qz.list.length*100}%"></i></div>
     <div class="q-card"><div class="qlabel">${askEn?'この単語の意味は？':'これを英語で言うと？'}</div>
       <div class="qword ${askEn?'':'ja'}">${esc(question)}</div></div>
@@ -518,12 +600,19 @@ function answerQuiz(picked,correctId){
     else if(id===picked)b.classList.add('wrong'); else b.classList.add('dim');
     b.onclick=null;
   });
-  if(ok){qz.score++;if(real){real.correct++;if(real.correct>=3)real.learned=true;}pop();} else {qz.miss.push(c);if(real)real.wrong++;}
+  if(ok){qz.score++;qz.combo++;qz.maxCombo=Math.max(qz.maxCombo,qz.combo);
+    if(qz.combo>state.maxCombo){state.maxCombo=qz.combo;}
+    if(real){real.correct++;if(real.correct>=3)real.learned=true;}
+    addXp(10+(qz.combo>=5?10:qz.combo>=3?5:0));touchStreak();pop(qz.combo>=3?14:8);
+  } else {qz.combo=0;qz.miss.push(c);if(real)real.wrong++;}
   save();
   setTimeout(()=>{qz.i++;qz.answered=false;renderQuiz();},ok?700:1300);
 }
 function renderQuizResult(){
   const total=qz.list.length,rate=Math.round(qz.score/total*100);
+  const rk=rankOf(rate);unlock('first');
+  const bk='quiz';const isBest=qz.score>(state.best[bk]||0);
+  if(isBest){state.best[bk]=qz.score;save();}
   let emoji='💪',msg='その調子！';
   if(rate===100){emoji='🏆';msg='ぜんぶ正解！すごい！';}
   else if(rate>=80){emoji='🎉';msg='よくできました！';}
@@ -534,25 +623,82 @@ function renderQuizResult(){
   screen.innerHTML=`
     <button class="back" onclick="renderHome()">‹ もどる</button>
     <div class="result"><div class="emoji">${emoji}</div>
+      <div style="font-family:Poppins;font-size:46px;font-weight:800;color:var(--accent);line-height:1">${rk}</div>
       <div class="big">${qz.score}<span style="font-size:28px;color:var(--sub)">/${total}</span></div>
-      <h2>${msg}</h2><p>正答率 ${rate}%</p></div>
+      <h2>${msg}</h2><p>正答率 ${rate}% ／ 最大 ${qz.maxCombo} コンボ${isBest?' ／ 🏅ベスト更新！':''}</p></div>
     ${miss}
     <div style="display:flex;gap:10px;margin-top:8px">
       <button class="btn btn-ghost" onclick="renderHome()">ホーム</button>
       <button class="btn btn-primary" onclick="startQuiz()">もう一回</button></div>`;
 }
 
+/* タイムアタック */
+let ta={pool:[],i:0,score:0,t:60,timer:null,answered:false,combo:0};
+function startTA(){
+  const list=wordsOf(currentGroup);
+  if(list.length<4){toast('タイムアタックは4語以上で遊べるよ');return;}
+  ta={pool:shuffle(list),i:0,score:0,t:60,timer:null,answered:false,combo:0};
+  renderTA();
+  ta.timer=setInterval(()=>{ta.t--;const el=$('taTimer');
+    if(el){el.textContent=ta.t;if(ta.t<=10)el.style.color='var(--danger)';}
+    if(ta.t<=0){clearInterval(ta.timer);finishTA();}},1000);
+}
+function taWord(){ if(ta.i>=ta.pool.length){ta.pool=shuffle(ta.pool);ta.i=0;} return ta.pool[ta.i]; }
+function renderTA(){
+  const c=taWord();ta.answered=false;
+  const others=shuffle(state.words.filter(x=>x.id!==c.id)).slice(0,3);
+  const opts=shuffle([c,...others]);
+  screen.innerHTML=`
+    <button class="back" onclick="quitTA()">‹ やめる</button>
+    <div class="mode-head"><h2>⚡ タイムアタック</h2>
+      <span class="quiz-score">${ta.combo>=2?`<span class="combo-tag">🔥${ta.combo} </span>`:''}⭐ ${ta.score}　<span id="taTimer" style="font-family:Poppins;font-weight:800;font-size:20px;color:var(--accent)">${ta.t}</span></span></div>
+    <div class="q-card"><div class="qlabel">この単語の意味は？</div>
+      <div class="qword">${esc(c.en)}</div></div>
+    <div class="choices">
+      ${opts.map(x=>`<button class="choice" data-id="${x.id}" onclick="answerTA('${x.id}','${c.id}')">${esc(x.ja)}</button>`).join('')}
+    </div>`;
+}
+function answerTA(picked,correctId){
+  if(ta.answered)return;ta.answered=true;
+  const c=ta.pool[ta.i],real=state.words.find(x=>x.id===c.id),ok=picked===correctId;
+  document.querySelectorAll('.choice').forEach(b=>{const id=b.dataset.id;
+    if(id===correctId)b.classList.add('correct');else if(id===picked)b.classList.add('wrong');else b.classList.add('dim');b.onclick=null;});
+  if(ok){ta.score++;ta.combo++;if(ta.combo>state.maxCombo)state.maxCombo=ta.combo;
+    if(real){real.correct++;if(real.correct>=3)real.learned=true;}pop(6);}
+  else{ta.combo=0;if(real)real.wrong++;}
+  save();
+  setTimeout(()=>{ta.i++;if(ta.t>0)renderTA();},ok?350:650);
+}
+function quitTA(){clearInterval(ta.timer);renderHome();}
+function finishTA(){
+  const isBest=ta.score>(state.best.ta||0);
+  if(isBest){state.best.ta=ta.score;}
+  addXp(ta.score*10);touchStreak();save();checkAch();
+  const rk=ta.score>=20?'S':ta.score>=15?'A':ta.score>=10?'B':ta.score>=6?'C':'D';
+  screen.innerHTML=`
+    <button class="back" onclick="renderHome()">‹ もどる</button>
+    <div class="result"><div class="emoji">⚡</div>
+      <div style="font-family:Poppins;font-size:46px;font-weight:800;color:var(--accent);line-height:1">${rk}</div>
+      <div class="big">${ta.score}<span style="font-size:26px;color:var(--sub)">問</span></div>
+      <h2>${isBest?'🏅 自己ベスト更新！':'おつかれさま！'}</h2>
+      <p>60秒で ${ta.score}問正解 ／ +${ta.score*10}XP</p></div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="renderHome()">ホーム</button>
+      <button class="btn btn-primary" onclick="startTA()">もう一回</button></div>`;
+  if(ta.score>=15)setTimeout(()=>pop(18),200);
+}
+
 /* 書いて覚える */
 let sp={list:[],i:0,score:0,miss:[],answered:false};
 function startSpell(){ const list=wordsOf(currentGroup); if(!list.length){toast('このグループに単語がないよ');return;}
   const n=quizCount==='all'?list.length:Math.min(quizCount,list.length);
-  sp={list:shuffle(list).slice(0,n),i:0,score:0,miss:[],answered:false,hint:0,retry:false}; renderSpell(); }
+  sp={list:shuffle(list).slice(0,n),i:0,score:0,miss:[],answered:false,hint:0,retry:false,combo:0,maxCombo:0}; renderSpell(); }
 function renderSpell(){
   if(sp.i>=sp.list.length) return renderSpellResult();
   const c=sp.list[sp.i];
   screen.innerHTML=`
     <button class="back" onclick="renderHome()">‹ もどる</button>
-    <div class="mode-head"><h2>✍️ 書いて覚える</h2><span class="quiz-score">⭐ ${sp.score} / ${sp.i}${sp.list.length?' ('+(sp.i+1)+'/'+sp.list.length+')':''}</span></div>
+    <div class="mode-head"><h2>✍️ 書いて覚える</h2><span class="quiz-score">${sp.combo>=2?`<span class="combo-tag">🔥${sp.combo} </span>`:''}⭐ ${sp.score} (${sp.i+1}/${sp.list.length})</span></div>
     <div class="progress-line"><i style="width:${sp.i/sp.list.length*100}%"></i></div>
     <div class="q-card"><div class="qlabel">${sp.retry?'もう一度：正しいつづりで書こう':'この意味を英語で書こう'}</div>
       <div class="qword ja">${esc(c.ja)}</div>
@@ -588,12 +734,15 @@ function checkSpell(){
   const ok=norm(val)===norm(c.en),real=state.words.find(x=>x.id===c.id),fb=$('spFeedback');
   const inp=$('spInput'); if(inp) inp.disabled=true;
   if(ok){
-    if(!sp.retry){ sp.score++; if(real){real.correct++; if(real.correct>=3)real.learned=true;} }
-    pop();
+    if(!sp.retry){ sp.score++; sp.combo++; sp.maxCombo=Math.max(sp.maxCombo,sp.combo);
+      if(sp.combo>state.maxCombo)state.maxCombo=sp.combo;
+      if(real){real.correct++; if(real.correct>=3)real.learned=true;}
+      addXp(15+(sp.combo>=5?10:sp.combo>=3?5:0));touchStreak(); }
+    pop(sp.combo>=3?14:8);
     fb.innerHTML=`<div style="background:var(--success);color:#fff;border-radius:14px;padding:16px;text-align:center;font-weight:800;font-size:16px">⭕ せいかい！　<span style="font-family:Poppins">${esc(c.en)}</span></div>
       <button class="btn btn-primary" style="margin-top:12px" onclick="nextSpell()">次へ ›</button>`;
   }else{
-    if(!sp.retry){ sp.miss.push(c); if(real)real.wrong++; }
+    if(!sp.retry){ sp.combo=0; sp.miss.push(c); if(real)real.wrong++; }
     fb.innerHTML=`<div style="background:#FFF0F2;border:1.5px solid var(--danger);border-radius:14px;padding:16px;text-align:center">
       <div style="color:var(--danger);font-weight:800;margin-bottom:6px">❌ おしい！ せいかいは…</div>
       <div style="font-family:Poppins;font-size:26px;font-weight:700;color:var(--text)">${esc(c.en)}</div>
@@ -666,6 +815,7 @@ function tapTile(el){
 function stopGame(){ clearInterval(gm.timer); renderHome(); }
 function finishGame(){
   clearInterval(gm.timer);
+  addXp(30);touchStreak();
   setTimeout(()=>{ screen.innerHTML=`
     <button class="back" onclick="renderHome()">‹ もどる</button>
     <div class="result"><div class="emoji">⚡</div><div class="big">${fmt(gm.t)}</div><h2>クリア！</h2><p>${gm.need}ペア そろえたよ</p></div>
