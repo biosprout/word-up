@@ -407,6 +407,8 @@ const ACH=[
 ];
 function lvlInfo(xp){let l=1,need=100,acc=0;while(xp>=acc+need){acc+=need;l++;need=100*l;}return{level:l,cur:xp-acc,need};}
 if(!state.tickets){state.tickets={earned:Math.max(0,lvlInfo(state.xp).level-1)+state.ach.length,used:[]};save();}
+if(!state.ticketLabel)state.ticketLabel='ゲーム30分';
+state.tickets.used=state.tickets.used.map(u=>typeof u==='string'?{d:u,l:'ゲーム30分'}:u);
 function ticketsLeft(){return state.tickets.earned-state.tickets.used.length;}
 function grantTicket(n){state.tickets.earned+=n;save();setTimeout(()=>toast('🎟 ごほうび券ゲット！（のこり'+ticketsLeft()+'枚）'),1100);}
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -839,6 +841,10 @@ function finishGame(){
 }
 
 /* ごほうび券 */
+function editTicketLabel(){
+  const v=prompt('ごほうび券の内容を入力してね（おうちの人と決めよう）',state.ticketLabel);
+  if(v&&v.trim()){state.ticketLabel=v.trim();save();toast('券の内容を「'+state.ticketLabel+'」にしたよ');renderTickets();}
+}
 function renderTickets(){
   const left=ticketsLeft();
   screen.innerHTML=`
@@ -847,20 +853,21 @@ function renderTickets(){
     <div class="ring-card" style="flex-direction:column;text-align:center;gap:6px">
       <div style="font-size:12px;color:var(--sub);font-weight:700">つかえる券</div>
       <div style="font-family:Poppins;font-size:52px;font-weight:800;color:var(--accent);line-height:1">${left}<span style="font-size:20px;color:var(--sub)">枚</span></div>
-      <div style="font-size:12px;font-weight:700">1枚 = ゲーム30分（Switchなど）</div>
+      <div style="font-size:12px;font-weight:700">1枚 = ${esc(state.ticketLabel)}</div>
     </div>
     <button class="btn btn-accent" ${left?'':'disabled style="opacity:.5"'} onclick="useTicket()">1枚つかう（おうちの人に見せてね）</button>
     <p class="help">レベルアップで1枚、実績かいじょで1枚もらえるよ。つかうときは、この画面をおうちの人に見せてから「つかう」を押そう。</p>
+    <button class="btn btn-ghost" style="margin-top:10px;font-size:13px;padding:12px" onclick="editTicketLabel()">⚙ 券の内容をへんこう（おうちの人向け）</button>
     ${state.tickets.used.length?`<div class="section-label" style="margin-top:14px">つかった記ろく</div>
-    <div class="word-list">${state.tickets.used.slice().reverse().slice(0,10).map(u=>`<div class="word-row"><div><span class="w-ja">🎮 ゲーム30分</span><div class="w-grp">${u}</div></div></div>`).join('')}</div>`:''}
+    <div class="word-list">${state.tickets.used.slice().reverse().slice(0,10).map(u=>`<div class="word-row"><div><span class="w-ja">🎟 ${esc(u.l)}</span><div class="w-grp">${esc(u.d)}</div></div></div>`).join('')}</div>`:''}
   `;
 }
 function useTicket(){
   if(ticketsLeft()<=0){toast('券がないよ。レベルアップでゲット！');return;}
-  if(!confirm('ごほうび券を1枚つかう？\n（ゲーム30分）'))return;
+  if(!confirm('ごほうび券を1枚つかう？\n（'+state.ticketLabel+'）'))return;
   const d=new Date();
-  state.tickets.used.push(d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'));
-  save();pop(12);toast('🎮 ゲーム30分けん、つかったよ！');renderTickets();
+  state.tickets.used.push({d:d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'),l:state.ticketLabel});
+  save();pop(12);toast('🎟 「'+state.ticketLabel+'」を1枚つかったよ！');renderTickets();
 }
 
 /* リスニング */
